@@ -6,8 +6,8 @@ const userSchema = new Schema({
     unique: true,
     required: true,    
     validate: {
-      validator: (username) => {
-        if (username.length >= 3 && username.length < 50) {
+      validator: (usuario) => {
+        if (usuario.length >= 3 && usuario.length < 50) {
           return true;
         } else {
           return false;

@@ -12,8 +12,7 @@ const getUsers = async (req,res) => {
 };
 
 const createUser = async (req,res) => {
-    const { usuario, email, password } = req.body;
-    const user = new User({usuario, email, password});
+    const user = new User({ req.body });
     const result = await user.save();
     res.send(result);
     console.log("usuario guardado")
