@@ -24,7 +24,7 @@ Backend para el proyecto https://github.com/christopherBryan1996/PF
 - Clonar repo ``git clone https://github.com/NaniBM/ClanFest-API.git``
 - Abrir proyecto en una terminal 
 - Ejecutar ``npm install``
-- In the ``index.js``: reemplazar  **process.env.DB_UR** por la direccion de tu base de datos en Mongo Atlas
+- En``index.js``: reemplazar  **process.env.DB_UR** por la direccion de tu base de datos en Mongo Atlas
     
     `mongoose.connect(process.env.DB_URI,{
     useNewUrlParser: true,
