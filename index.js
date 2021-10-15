@@ -2,12 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config()
 
 const router = require("./Routes")
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://root:rootHenry2021@clanfestdb.kfcqt.mongodb.net/clanAppDB?retryWrites=true&w=majority',{
+mongoose.connect(process.env.DB_URI,{
     useNewUrlParser: true,
 })
 .then(db => console.log('BD conectada'))
