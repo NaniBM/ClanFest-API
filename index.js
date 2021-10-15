@@ -2,10 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config()
+require('dotenv').config();
 
-const router = require("./Routes")
 const app = express();
+
+// importacion de rutas
+const router = require("./Routes/index");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URI,{

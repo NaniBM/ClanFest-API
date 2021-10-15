@@ -42,6 +42,14 @@ URL de la api en modo desarrollo: http://localhost:3008/
 
 > GET https://api-fest.herokuapp.com/users <br />
 
+### Rutas a Users
+
+Ruta para traer todos los usuarios:
+> GET https://api-fest.herokuapp.com/users/ <br />
+
+Ruta para traer el detalle de un usuario:
+> GET https://api-fest.herokuapp.com/users/:id <br />
+
 ### Rutas a Eventos
 Ruta para traer todos los eventos:
 > GET https://api-fest.herokuapp.com/events/ <br />
