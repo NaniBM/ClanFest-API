@@ -5,7 +5,7 @@ const eventsRoutes = require('./Events');
 
 const router = Router();
 
-router.use('/', usersRoutes);
-router.use('/', eventsRoutes)
+router.use('/users', usersRoutes);
+router.use('/events', eventsRoutes)
 
 module.exports = router;
