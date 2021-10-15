@@ -9,3 +9,5 @@ const getEvents = async (req,res) => {
         console.log(err) 
     } 
 };
+
+module.exports = { getEvents };
