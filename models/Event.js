@@ -6,10 +6,30 @@ const eventSchema = new Schema({
   nombreDelEvento: {
     type: String,
     required: true,
+    validate: {
+      validator: (nombreDelEvento) => {
+        if (nombreDelEvento.length >= 3 && nombreDelEvento.length < 60) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      message: "Debe ser mayor a 3 caracteres y menor a 60",
+    },
   },
   direccion: {
     type: String,
     required: true,
+    validate:{
+      validator:(descrip)=>{
+        if(descrip.length >= 10){
+          return true
+        }else{
+          return false
+        }
+      },
+      message: 'Tu descripcion debe ser mayor a 10 caracteres'
+    },
   },
   precio: {
     type: Number,
