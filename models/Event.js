@@ -10,6 +10,9 @@ const eventSchema = new Schema({
   direccion: {
     type: String,
     required: true,
+  },  
+  coordenadas: {
+    type: []
   },
   precio: {
     type: Number,
