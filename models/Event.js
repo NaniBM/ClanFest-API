@@ -20,11 +20,6 @@ const eventSchema = new Schema({
   direccion: {
     type: String,
     required: true,
-<<<<<<< HEAD
-  },  
-  coordenadas: {
-    type: []
-=======
     validate:{
       validator:(descrip)=>{
         if(descrip.length >= 10){
@@ -35,7 +30,9 @@ const eventSchema = new Schema({
       },
       message: 'Tu descripcion debe ser mayor a 10 caracteres'
     },
->>>>>>> 3c6f6c778a4f58591182b367f337a223db326cf9
+  },
+  coordenadas: {
+    type: []
   },
   precio: {
     type: Number,
