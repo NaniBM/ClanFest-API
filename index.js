@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 // });
 
 //habilitar cors
-app.use(cors(origin: '*'));
+app.use(cors({origin: '*'}));
 app.use(router);
 
 const port = process.env.PORT || 3008;
