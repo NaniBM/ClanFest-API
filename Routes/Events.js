@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const router = Router();
 
-const {getEvents, addEvents, getEventDetail, getAssistans} = require("../Controllers/EventsController")
+const {getEvents, addEvents, getEventDetail, getAssistans} = require("../Controllers/EventsController");
 
 //ruta para traer todos los eventos
 router.get("/", getEvents)
