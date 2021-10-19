@@ -140,4 +140,61 @@ const editUser = async (req, res) => {
 
 };
 
-module.exports = { getUsers, getUserById, deleteUser, editUser };
+const addFavourite = async (req, res) => {
+    try {
+
+        const { id, eventId } = req.params;
+
+        const user = await User.findByIdAndUpdate(id, {
+            // funcion para poder pushear agregar elementos a una propiedad array de un Model
+            $push: {
+                eventsFavoritos: eventId
+            }
+        }
+        );
+
+        return res.json({
+            message: `${user.usuario} agrego un evento a Favorito`
+        });
+
+    } catch (err) {
+        res.json({
+            message: "Error al agregar a favorito"
+        })
+    }
+};
+
+const removeFavourite = async (req, res) => {
+    try {
+
+        const { id, eventId } = req.params;
+
+        
+        const eventFav = await User.find({ eventsFavoritos: eventId});
+
+        if(eventFav.length === 0) {
+            return res.json({
+                message: "El evento no se encuentra en favoritos"
+            })
+        }
+
+        const user = await User.findByIdAndUpdate(id, {
+            // funcion para poder eliminar elementos de una propiedad array de un Model
+            $pull: {
+                eventsFavoritos: eventId
+            }
+        }
+        );
+
+        return res.json({
+            message: `${user.usuario} quito un evento de Favoritos`
+        });
+
+    } catch (err) {
+        res.json({
+            message: "Error al agregar a favorito"
+        })
+    }
+};
+
+module.exports = { getUsers, getUserById, deleteUser, editUser, addFavourite, removeFavourite };
