@@ -209,7 +209,12 @@ const getFavouritesEvents = async (req, res) => {
             _id: 1
         });
 
-        return res.json(result.eventsFavoritos);
+        const favouritesEvents = result.eventsFavoritos;
+
+        return res.json({
+            message: "Se han encontrado favoritos",
+            favouritesEvents
+        });
 
     } catch (err) {
         res.json({
