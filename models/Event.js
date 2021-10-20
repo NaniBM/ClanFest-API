@@ -22,7 +22,7 @@ const eventSchema = new Schema({
     required: true,
     validate:{
       validator:(descrip)=>{
-        if(descrip.length >= 10){
+        if(descrip.length >= 0){
           return true
         }else{
           return false
@@ -65,7 +65,7 @@ const eventSchema = new Schema({
     type: Number
   },
   asistentes: {
-    type: [], //guardar objetos { usernameDelAsistente: '' ,  tareasdelAsistente: []}
+    type: [], //guardar objetos { usuario: '' ,  tareasDelUsuario: []}
   },
   imagen: {
     type: String,
