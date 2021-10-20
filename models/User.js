@@ -54,14 +54,16 @@ const userSchema = new Schema({
     default: new Date(),
   },
   eventosCreados: {
-    type: [], //array de event._id
+    type: [Schema.Types.OjectId],
+    ref: 'Event', //array de event._id
   },
   eventsFavoritos: {
     type: [Schema.Types.OjectId],
     ref: 'Event' //array de event._id
   },
   eventosaAsistir: {
-    type: [], //array de event._id
+    type: [Schema.Types.OjectId],
+    ref: 'Event' //array de event._id
   },
 });
 
