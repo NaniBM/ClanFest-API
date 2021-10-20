@@ -34,9 +34,11 @@ const getEventDetail = async function(req, res){
 
 const getAssistans = async function(req, res){
     try{
-        const detail = await Event.findById(req.params);
+        console.log(req.params.id)
+        const detail = await Event.findById(req.params.id);
         const list = detail.asistentes;
-        res.send(list)
+        const autor = detail.autor; 
+        res.send({autor, list})
     }
     catch (err) {
         console.log(err)
