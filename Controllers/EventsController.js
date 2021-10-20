@@ -99,26 +99,40 @@ const putEditEvent = async function(req, res){
         console.log(err);
     };
 };
-
+//------------------------------------------------TEMPORAL
+// const putEditEvent = async function(req, res){
+//     try{
+//         const changes = req.body;
+//         const applyChanges = await User.findByIdAndUpdate(req.params.id, changes);
+//         return res.json({
+//             message: `${applyChanges.nombreDelEvento} fue editado con exito`
+//         });
+//     }
+//     catch (err) {
+//         console.log(err);
+//     };
+// };
+//---------------------------------------------
 const putDeleteAssistans = async function(req, res){
     try{
         const {usuario} = req.body;
         const {id} = req.params;
         const listAssist = await Event.findById(id, "asistentes");
-        
+
         if(!listAssist.asistentes.length){
             return res.json({
                 message: "Este evento no tiene asistentes"
             });
         }
-        
+        console.log(listAssist)
         if(!listAssist.asistentes.find((e)=> e.usuario === usuario)) return res.json({message: `${usuario} no se encuentra en este evento`});
         const filtradoA = {asistentes: listAssist.asistentes.filter((e)=> e.usuario !== usuario)};
         const deleteAssistan = await Event.findByIdAndUpdate(id, filtradoA);
         
-        const listEvents = await User.findOne(usuario, "eventosaAsistir");
-        const filtradoE = {eventosaAsistir: listEvents.eventosaAsistir.filter((e)=> e.id !== id)};
-        const deleteEventbyUser = await User.findOneAndUpdate(usuario, filtradoE);
+        const listEvents = await User.findOne({usuario: usuario}, "eventosaAsistir");
+        console.log(listEvents)
+        const filtradoE = {eventosaAsistir: listEvents.eventosaAsistir.filter((e)=> e !== id)};
+        const deleteEventbyUser = await User.findOneAndUpdate({usuario: usuario}, filtradoE);
         
         return res.json({
             message: `${usuario} fue eliminado del evento con exito`
