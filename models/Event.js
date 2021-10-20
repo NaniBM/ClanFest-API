@@ -22,17 +22,17 @@ const eventSchema = new Schema({
     required: true,
     validate:{
       validator:(descrip)=>{
-        if(descrip.length >= 0){
+        if(descrip.length >= 3){
           return true
         }else{
           return false
         }
       },
-      message: 'Tu descripcion debe ser mayor a 10 caracteres'
+      message: 'Tu direccion debe ser mayor a 3 caracteres'
     },
   },
   coordenadas: {
-    type: []
+    type: {}
   },
   precio: {
     type: Number,

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUsers, getUserById, deleteUser, editUser, removeFavourite, addFavourite} = require('../Controllers/UsersController');
+const { getUsers, getFavouritesEvents, getUserById, deleteUser, editUser, removeFavourite, addFavourite} = require('../Controllers/UsersController');
 
 const router = express.Router();
 
@@ -20,5 +20,7 @@ router.put('/addfavourite/:id/:eventId', addFavourite);
 
 // borrar evento de favorito
 router.put('/removefavourite/:id/:eventId', removeFavourite);
+
+router.get('/favouritesevents/:id', getFavouritesEvents);
 
 module.exports = router;
