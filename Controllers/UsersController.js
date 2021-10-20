@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const Event = require('../models/Event');
 
 const getUsers = async (req, res) => {
     try {
@@ -169,10 +170,10 @@ const removeFavourite = async (req, res) => {
 
         const { id, eventId } = req.params;
 
-        
-        const eventFav = await User.find({ eventsFavoritos: eventId});
 
-        if(eventFav.length === 0) {
+        const eventFav = await User.find({ eventsFavoritos: eventId });
+
+        if (eventFav.length === 0) {
             return res.json({
                 message: "El evento no se encuentra en favoritos"
             })
@@ -197,4 +198,29 @@ const removeFavourite = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, getUserById, deleteUser, editUser, addFavourite, removeFavourite };
+const getFavouritesEvents = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const result = await User.findById(id).populate('eventsFavoritos', {
+            nombreDelEvento: 1,
+            _id: 1
+        });
+
+        const favouritesEvents = result.eventsFavoritos;
+
+        return res.json({
+            message: "Se han encontrado favoritos",
+            favouritesEvents
+        });
+
+    } catch (err) {
+        res.json({
+            message: "Error al buscar eventos favoritos"
+        })
+    }
+}
+
+module.exports = { getUsers, getUserById, deleteUser, editUser, addFavourite, removeFavourite, getFavouritesEvents };
