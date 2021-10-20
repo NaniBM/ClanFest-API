@@ -57,7 +57,8 @@ const userSchema = new Schema({
     type: [], //array de event._id
   },
   eventsFavoritos: {
-    type: [], //array de event._id
+    type: [Schema.Types.OjectId],
+    ref: 'Event' //array de event._id
   },
   eventosaAsistir: {
     type: [], //array de event._id
