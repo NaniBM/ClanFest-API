@@ -87,6 +87,23 @@ const getAssistans = async function(req, res){
     };
 };
 
+const getTareasAssist = async function(req, res){
+    try{
+        const list = await Event.findById(req.params.id, "asistentes.tareasDelUsuario");
+        // if (!list.asistentes.length) {
+        //     return res.json({
+        //         message: "Este evento no tiene asistentes"
+        //     });
+
+        // } else {
+            res.send(list);
+        // };
+    }
+    catch (err) {
+        console.log(err);
+    };
+};
+
 const putEditEvent = async function(req, res){
     try{
         const changes = req.body;

@@ -16,6 +16,9 @@ router.post('/create', addEvents);
 //ruta para ver la lista de los asistentes
 router.get('/assistans/:id', getAssistans);
 
+//ruta para traer las tareas de los asistentes
+router.get('/assistans/tareas/:id', getAssistans);
+
 //ruta para editar informacion del evento
 router.put('/edit/:id', putEditEvent);
 
