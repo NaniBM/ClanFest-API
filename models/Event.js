@@ -6,10 +6,33 @@ const eventSchema = new Schema({
   nombreDelEvento: {
     type: String,
     required: true,
+    validate: {
+      validator: (nombreDelEvento) => {
+        if (nombreDelEvento.length >= 3 && nombreDelEvento.length < 60) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      message: "Debe ser mayor a 3 caracteres y menor a 60",
+    },
   },
   direccion: {
     type: String,
     required: true,
+    validate:{
+      validator:(descrip)=>{
+        if(descrip.length >= 3){
+          return true
+        }else{
+          return false
+        }
+      },
+      message: 'Tu direccion debe ser mayor a 3 caracteres'
+    },
+  },
+  coordenadas: {
+    type: {}
   },
   precio: {
     type: Number,
@@ -42,7 +65,7 @@ const eventSchema = new Schema({
     type: Number
   },
   asistentes: {
-    type: [], //guardar objetos { usernameDelAsistente: '' ,  tareasdelAsistente: []}
+    type: [], //guardar objetos { usuario: '' ,  tareasDelUsuario: []}
   },
   imagen: {
     type: String,
