@@ -87,6 +87,45 @@ const getAssistans = async function(req, res){
     };
 };
 
+const patchNewTarea = async function(req, res){
+    try{
+        const {id} = req.params;
+        const {usuario, tareasDelUsuario} = req.body;
+
+        const tarea = await Event.findByIdAndUpdate(id, 
+            // funcion para poder pushear agregar elementos a una propiedad array de un Model
+            {'$push': {"asistentes.$[elem].tareasDelUsuario": tareasDelUsuario}},
+            { 'arrayFilters' : [ {"elem.usuario" : usuario } ],
+            multi : false }
+        );
+        return res.json({
+            message: `Se añadio una tarea al usuario ${usuario}`
+        });
+    }
+    catch (err) {
+        console.log(err);
+    };
+};
+
+const patchBorrarTarea = async function(req, res){
+    try{
+        const {id} = req.params;
+        const {usuario, tareasDelUsuario} = req.body;
+
+        const tarea = await Event.findByIdAndUpdate(id, 
+            {'$pull': {"asistentes.$[user].tareasDelUsuario": tareasDelUsuario}},
+            { 'arrayFilters' : [ {"user.usuario" : usuario }],
+            multi : false }
+        );
+        return res.json({
+            message: `Se eliminó una tarea al usuario ${usuario}`
+        });
+    }
+    catch (err) {
+        console.log(err);
+    };
+};
+
 const putEditEvent = async function(req, res){
     try{
         const changes = req.body;
@@ -99,20 +138,7 @@ const putEditEvent = async function(req, res){
         console.log(err);
     };
 };
-//------------------------------------------------TEMPORAL
-// const putEditEvent = async function(req, res){
-//     try{
-//         const changes = req.body;
-//         const applyChanges = await User.findByIdAndUpdate(req.params.id, changes);
-//         return res.json({
-//             message: `${applyChanges.nombreDelEvento} fue editado con exito`
-//         });
-//     }
-//     catch (err) {
-//         console.log(err);
-//     };
-// };
-//---------------------------------------------
+
 const putDeleteAssistans = async function(req, res){
     try{
         const {usuario} = req.body;
@@ -169,5 +195,7 @@ module.exports = {
     getAssistans,
     putEditEvent,
     deleteEvent,
-    putDeleteAssistans
+    putDeleteAssistans,
+    patchNewTarea,
+    patchBorrarTarea
 }

@@ -1,10 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const Event = require('../models/Event');
 
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find().exec();
         return res.json(users)
     } catch (err) {
         res.json({
@@ -55,7 +54,7 @@ const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const result = await User.findByIdAndDelete(id);
+        const result = await User.findByIdAndDelete(id).exec();
 
         if (result === null) {
             return res.json({
@@ -89,7 +88,7 @@ const editUser = async (req, res) => {
                 {
                     usuario: name
                 }
-            );
+            ).exec();
 
             return res.json({
                 message: `Nombre de user ${user.usuario} actualizado con exito a ${name}`
@@ -142,21 +141,33 @@ const editUser = async (req, res) => {
 };
 
 const addFavourite = async (req, res) => {
+
     try {
 
         const { id, eventId } = req.params;
 
-        const user = await User.findByIdAndUpdate(id, {
-            // funcion para poder pushear agregar elementos a una propiedad array de un Model
-            $push: {
-                eventsFavoritos: eventId
-            }
-        }
-        );
+        // verifico que el evento no se encuentre ya dentro de los favoritos
+        const result = await User.findById(id).where('eventsFavoritos').equals(eventId).exec();
 
-        return res.json({
-            message: `${user.usuario} agrego un evento a Favorito`
-        });
+        if (result === null) {
+
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder pushear agregar elementos a una propiedad array de un Model
+                $push: {
+                    eventsFavoritos: eventId
+                }
+            }
+            ).exec();
+
+            return res.json({
+                message: `${user.usuario} agrego un evento a Favorito`
+            });
+        } else {
+
+            return res.json({
+                message: 'Ya existe el evento en favoritos'
+            });
+        }
 
     } catch (err) {
         res.json({
@@ -170,26 +181,25 @@ const removeFavourite = async (req, res) => {
 
         const { id, eventId } = req.params;
 
+        const result = await User.findById(id).where('eventsFavoritos').equals(eventId).exec();
 
-        const eventFav = await User.find({ eventsFavoritos: eventId });
-
-        if (eventFav.length === 0) {
+        if (result === null) {
             return res.json({
                 message: "El evento no se encuentra en favoritos"
             })
-        }
-
-        const user = await User.findByIdAndUpdate(id, {
-            // funcion para poder eliminar elementos de una propiedad array de un Model
-            $pull: {
-                eventsFavoritos: eventId
+        } else {
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder eliminar elementos de una propiedad array de un Model
+                $pull: {
+                    eventsFavoritos: eventId
+                }
             }
-        }
-        );
+            );
 
-        return res.json({
-            message: `${user.usuario} quito un evento de Favoritos`
-        });
+            return res.json({
+                message: `${user.usuario} quito un evento de Favoritos`
+            });
+        }
 
     } catch (err) {
         res.json({
@@ -207,20 +217,94 @@ const getFavouritesEvents = async (req, res) => {
         const result = await User.findById(id).populate('eventsFavoritos', {
             nombreDelEvento: 1,
             _id: 1
-        });
+        }).exec();
 
         const favouritesEvents = result.eventsFavoritos;
 
-        return res.json({
-            message: "Se han encontrado favoritos",
-            favouritesEvents
-        });
+        if (favouritesEvents.length === 0) {
+            return res.json({
+                message: "El usario no tiene eventos favoritos",
+                favouritesEvents
+            });
+        } else {
+            return res.json({
+                message: "Se han encontrado favoritos",
+                favouritesEvents
+            });
+        }
 
     } catch (err) {
         res.json({
             message: "Error al buscar eventos favoritos"
         })
     }
-}
+};
 
-module.exports = { getUsers, getUserById, deleteUser, editUser, addFavourite, removeFavourite, getFavouritesEvents };
+const getUserEvents = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const result = await User.findById(id).populate('eventosCreados', {
+            nombreDelEvento: 1,
+            _id: 1
+        }).exec();
+
+        const createdEvents = result.eventosCreados;
+
+        if (createdEvents.length === 0) {
+            return res.json({
+                message: "El usuario no tiene eventos creados",
+                createdEvents
+            });
+        } else {
+            return res.json({
+                message: "Se han encontrado eventos",
+                createdEvents
+            });
+        }
+
+    } catch (err) {
+        res.json({
+            message: "Error al buscar eventos de user"
+        })
+    }
+
+};
+
+const getUserEventsToAssist = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const result = await User.findById(id).populate('eventosaAsistir', {
+            nombreDelEvento: 1,
+            _id: 1
+        }).exec();
+
+
+        const eventsToAssist = result.eventosaAsistir;
+
+        if (eventsToAssist.length === 0) {
+            return res.json({
+                message: "El usuario no tiene eventos creados",
+                createdEvents
+            });
+        } else {
+            return res.json({
+                message: "Se han encontrado eventos",
+                createdEvents
+            });
+        }
+
+    } catch (err) {
+        res.json({
+            message: "Error al buscar eventos de user"
+        })
+    }
+
+};
+
+module.exports = { getUsers, getUserById, deleteUser, editUser, addFavourite, getUserEventsToAssist, removeFavourite, getUserEvents, getFavouritesEvents };
