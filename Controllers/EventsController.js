@@ -5,14 +5,20 @@ const User = require('../models/User');
 const addEvents = async function(req, res){
     try{
         const {nombreDelEvento, direccion, fecha, horaDeInicio, descripcion, autor} = req.body;
-        if(!nombreDelEvento || !direccion || !fecha || !horaDeInicio || !descripcion || !autor){
+        if(!nombreDelEvento || !direccion || !fecha || !horaDeInicio || !descripcion){
             return res.json({
                 message: 'Faltan campos por completar'
             });
         }
         const event = new Event(req.body);
-        const result = await event.save();
-        return res.send(result);
+        const result = await event.save((err)=> err? handleError(err): null);
+        console.log(event._id)
+        const creador = await User.findByIdAndUpdate(autor,
+            {'$push': {'eventosCreados': event._id}});
+        console.log('creadorrrrrr: ', creador)
+        return res.json({
+            message: 'Evento creado'
+        });
     }
     catch (err) {
         console.log(err);
@@ -56,7 +62,8 @@ const getEventDetail = async function(req, res){
         if(req.params.id.length !== 24) return res.json({message: "No existe el evento buscado"});
 
         const detail = await Event.findById(req.params.id);
-        if (!detail.length) {
+        console.log(detail)
+        if (!detail) {
             return res.json({
                 message: "No existe el evento buscado"
             });
