@@ -54,9 +54,9 @@ const eventSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  autor: {
-    type: String,
-    require: true, // guardar username del creador
+  autor: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'User'// guardar username del creador 
   },
   publico: {
     type: Boolean
