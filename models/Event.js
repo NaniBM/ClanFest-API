@@ -65,11 +65,8 @@ const eventSchema = new Schema({
     type: Number
   },
   asistentes: {
-    uid:{
-      type: Schema.Types.ObjectId, 
-      ref: 'User'
-    },
-    type: [],
+    type: [Schema.Types.ObjectId],
+    ref: 'User' 
   },
   imagen: {
     type: String,
