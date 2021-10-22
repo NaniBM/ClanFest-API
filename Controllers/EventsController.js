@@ -12,10 +12,9 @@ const addEvents = async function(req, res){
         }
         const event = new Event(req.body);
         const result = await event.save((err)=> err? handleError(err): null);
-        console.log(event._id)
         const creador = await User.findByIdAndUpdate(autor,
             {'$push': {'eventosCreados': event._id}});
-        console.log('creadorrrrrr: ', creador)
+
         return res.json({
             message: 'Evento creado'
         });
@@ -98,7 +97,16 @@ const patchNewTarea = async function(req, res){
     try{
         const {id} = req.params;
         const {usuario, tareasDelUsuario} = req.body;
-
+        // const exist = await Event.find({"asistentes.usuario": 1 , "asistentes.tareasDelUsuario":{'$in': [{tareasDelUsuario}]}}
+        //     );
+        // findById(id, {'asistentes':{'usuario': usuario, 'tareasDelUsuario': tareasDelUsuario}}).exec()
+        const exist = await Event.findById(id, 'asistentes')
+        // .where('asistentes').equals({'usuario': usuario}).exec();
+        // if(exist){
+        //     return res.send(exist)
+        // }else
+        //     return res.json({message: `fallaste bro`})
+        
         const tarea = await Event.findByIdAndUpdate(id, 
             // funcion para poder pushear agregar elementos a una propiedad array de un Model
             {'$push': {"asistentes.$[elem].tareasDelUsuario": tareasDelUsuario}},
