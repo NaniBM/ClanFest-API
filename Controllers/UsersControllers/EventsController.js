@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 
-const getUserEvents = async (req, res) => {
+const getEvents = async (req, res) => {
 
     try {
 
@@ -33,7 +33,7 @@ const getUserEvents = async (req, res) => {
 
 };
 
-const getUserEventsToAssist = async (req, res) => {
+const getEventsToAssist = async (req, res) => {
 
     try {
 
@@ -53,7 +53,7 @@ const getUserEventsToAssist = async (req, res) => {
             });
         } else {
             return res.json({
-                message: "Se han encontrado eventos",
+                message: "Se han encontrado eventos a asistir",
                 eventsToAssist
             });
         }
@@ -132,6 +132,6 @@ const deleteEventToAssist = async (req, res) => {
             message: "Error al borrar un evento a asistir"
         })
     }
-}
+};
 
-module.exports = { getUserEventsToAssist, getUserEvents, addEventToAssist, deleteEventToAssist };
+module.exports = { getEventsToAssist, getEvents, addEventToAssist, deleteEventToAssist };
