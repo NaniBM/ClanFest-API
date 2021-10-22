@@ -28,7 +28,7 @@ const getTasks = async (req, res) => {
         });
     }
 
-}
+};
 
 const addTask = async (req, res) => {
 

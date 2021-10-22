@@ -48,7 +48,7 @@ const getUserEventsToAssist = async (req, res) => {
 
         if (eventsToAssist.length === 0) {
             return res.json({
-                message: "El usuario no tiene eventos creados",
+                message: "El usuario no asiste a ningun evento",
                 createdEvents
             });
         } else {
@@ -66,4 +66,72 @@ const getUserEventsToAssist = async (req, res) => {
 
 };
 
-module.exports = { getUserEventsToAssist,  getUserEvents };
+const addEventToAssist = async (req, res) => {
+
+    try {
+
+        const { id, eventId } = req.params;
+
+        // verifico que el evento no se encuentre ya dentro de los favoritos
+        const result = await User.findById(id).where('eventosaAsistir').equals(eventId).exec();
+
+        if (result === null) {
+
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder pushear agregar elementos a una propiedad array de un Model
+                $push: {
+                    eventosaAsistir: eventId
+                }
+            }
+            ).exec();
+
+            return res.json({
+                message: `${user.usuario} agrego un nuevo evento a asistir`
+            });
+        } else {
+
+            return res.json({
+                message: 'El user ya asiste a este evento'
+            });
+        }
+
+    } catch (err) {
+        res.json({
+            message: "Error al agregar evento a asistir"
+        })
+    }
+};
+
+const deleteEventToAssist = async (req, res) => {
+    try {
+
+        const { id, eventId } = req.params;
+
+        const result = await User.findById(id).where('eventosaAsistir').equals(eventId).exec();
+
+        if (result === null) {
+            return res.json({
+                message: "El evento no se encuentra como evento a asistir"
+            })
+        } else {
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder eliminar elementos de una propiedad array de un Model
+                $pull: {
+                    eventosaAsistir: eventId
+                }
+            }
+            );
+
+            return res.json({
+                message: `${user.usuario} dejará de asistir a asistir a este evento`
+            });
+        }
+
+    } catch (err) {
+        res.json({
+            message: "Error al borrar un evento a asistir"
+        })
+    }
+}
+
+module.exports = { getUserEventsToAssist, getUserEvents, addEventToAssist, deleteEventToAssist };
