@@ -1,1 +1,0 @@
-//configuracion para guardar imagenes
