@@ -284,7 +284,6 @@ const getUserEventsToAssist = async (req, res) => {
             _id: 1
         }).exec();
 
-
         const eventsToAssist = result.eventosaAsistir;
 
         if (eventsToAssist.length === 0) {

@@ -16,10 +16,10 @@ router.delete('/delete/:id', deleteUser);
 router.put('/edit/:id', editUser);
 
 // agregar evento a favorito
-router.put('/addfavourite/:id/:eventId', addFavourite);
+router.patch('/addfavourite/:id/:eventId', addFavourite);
 
 // borrar evento de favorito
-router.put('/removefavourite/:id/:eventId', removeFavourite);
+router.patch('/removefavourite/:id/:eventId', removeFavourite);
 
 // traer todos los favoritos de un user
 router.get('/favouritesevents/:id', getFavouritesEvents);
