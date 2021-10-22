@@ -49,12 +49,12 @@ const getUserEventsToAssist = async (req, res) => {
         if (eventsToAssist.length === 0) {
             return res.json({
                 message: "El usuario no asiste a ningun evento",
-                createdEvents
+                eventsToAssist
             });
         } else {
             return res.json({
                 message: "Se han encontrado eventos",
-                createdEvents
+                eventsToAssist
             });
         }
 
