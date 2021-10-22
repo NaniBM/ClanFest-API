@@ -68,4 +68,38 @@ const addTask = async (req, res) => {
 
 };
 
+const deleteTask = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+        const { task } = req.query;
+
+
+        const result = await User.findById(id).where('eventsFavoritos').equals(eventId).exec();
+
+        if (result === null) {
+            return res.json({
+                message: "El evento no se encuentra en favoritos"
+            })
+        } else {
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder eliminar elementos de una propiedad array de un Model
+                $pull: {
+                    eventsFavoritos: eventId
+                }
+            }
+            );
+
+            return res.json({
+                message: `${user.usuario} quito un evento de Favoritos`
+            });
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+    };
+}
+
 module.exports = { addTask, getTasks };
