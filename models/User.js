@@ -3,7 +3,6 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   usuario: {
     type: String,
-    unique: true,
     required: true,    
     validate: {
       validator: (usuario) => {

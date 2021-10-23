@@ -2,8 +2,8 @@ const { Router } = require('express');
 
 const router = Router();
 
-const {getEvents, addEvents, getEventDetail, getAssistans, putEditEvent, deleteEvent, putDeleteAssistans, patchNewTarea, patchBorrarTarea} = require("../Controllers/EventsController")
-
+const {addEvents, getEvents, getEventDetail, putEditEvent, deleteEvent} = require("../Controllers/EventsControllers/EventController")
+const {getAssistans, putDeleteAssistans} = require("../Controllers/EventsControllers/AssisController")
 //ruta para traer todos los eventos
 router.get("/", getEvents);
 
@@ -15,12 +15,6 @@ router.post('/create', addEvents);
 
 //ruta para ver la lista de los asistentes
 router.get('/assistans/:id', getAssistans);
-
-//ruta para agregar tareas a los asistentes
-router.patch('/assistans/newTarea/:id', patchNewTarea);
-
-//ruta para eliminar tareas de los asistentes
-router.patch('/assistans/delTarea/:id', patchBorrarTarea);
 
 //ruta para editar informacion del evento
 router.put('/edit/:id', putEditEvent);
