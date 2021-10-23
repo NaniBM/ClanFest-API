@@ -3,7 +3,7 @@ const express = require('express');
 const { getUsers, getUserById, deleteUser, editUser } = require('../Controllers/UsersControllers/UserController');
 const { getFavouritesEvents, removeFavourite, addFavourite } = require('../Controllers/UsersControllers/FavoritesController');
 const { addTask, getTasks, deleteTask } = require('../Controllers/UsersControllers/TaskController');
-const { getUserEvents, getUserEventsToAssist } = require('../Controllers/UsersControllers/EventsController');
+const { getUserEvents, getUserEventsToAssist, addEventToAssist, deleteEventToAssist } = require('../Controllers/UsersControllers/EventsController');
 
 const router = express.Router();
 
@@ -28,14 +28,20 @@ router.get('/userevents/:id', getUserEvents);
 // traer todos los eventos a asistir de un user
 router.get('/usereventstoassist/:id', getUserEventsToAssist);
 
+// agregar evento a asistir
+router.patch('/addeventstoassist/:id/:eventId', addEventToAssist);
+
+// borra un evento a asistir
+router.patch('/removeeventstoassist/:id/:eventId', deleteEventToAssist);
+
 // traer tareas de un user
 router.get('/gettasks/:id', getTasks);
 
 // crear tarea de un user
 router.patch('/addtask/:id', addTask);
 
-// borrar tarea de un user
-router.patch('/deletetask/:id', deleteTask);
+// borrar tarea
+router.patch('/deleteTask/:id', deleteTask);
 
 // agregar evento a favorito
 router.patch('/addfavourite/:id/:eventId', addFavourite);

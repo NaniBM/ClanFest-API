@@ -28,7 +28,7 @@ const getTasks = async (req, res) => {
         });
     }
 
-}
+};
 
 const addTask = async (req, res) => {
 
@@ -75,31 +75,32 @@ const deleteTask = async (req, res) => {
         const { id } = req.params;
         const { task } = req.query;
 
-
-        const result = await User.findById(id).where('eventsFavoritos').equals(eventId).exec();
+        const result = await User.findById(id).where('tareas').equals(task).exec();
 
         if (result === null) {
             return res.json({
-                message: "El evento no se encuentra en favoritos"
+                message: "La tarea no existe"
             })
         } else {
             const user = await User.findByIdAndUpdate(id, {
                 // funcion para poder eliminar elementos de una propiedad array de un Model
                 $pull: {
-                    eventsFavoritos: eventId
+                    tareas: task
                 }
             }
             );
 
             return res.json({
-                message: `${user.usuario} quito un evento de Favoritos`
+                message: `${user.usuario} borro la tarea ${task}`
             });
         }
 
     }
     catch (err) {
-        console.log(err);
+        res.json({
+            message: "Error al borrar tarea"
+        })
     };
-}
+};
 
 module.exports = { addTask, getTasks, deleteTask };
