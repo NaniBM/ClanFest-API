@@ -3,7 +3,6 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   usuario: {
     type: String,
-    unique: true,
     required: true,    
     validate: {
       validator: (usuario) => {
@@ -48,6 +47,9 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     default: "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+  },
+  tareas: {
+    type: [],
   },
   fechaDeCreacion: {
     type: Date,
