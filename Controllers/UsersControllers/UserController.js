@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const getUsers = async (req, res) => {
     try {
         const users = await User.find().exec();
-        if (!users) {
+        if (users.length === 0) {
             return res.json({
                 message: "No se han encontrado usuarios"
             })
