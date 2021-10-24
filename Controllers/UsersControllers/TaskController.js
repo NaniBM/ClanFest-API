@@ -52,7 +52,7 @@ const addTask = async (req, res) => {
                     $push: {
                         tareas: [{
                             eventId: eventId,
-                            tareasDelUsuario: tarea
+                            tareasDelUsuario: tarea.toUpperCase()
                         }]
                     }
                 }).exec();
@@ -65,8 +65,6 @@ const addTask = async (req, res) => {
 
                 const indexEvent = userCheck.tareas.findIndex(e => e.eventId.toString() === eventId);
 
-                const task = tarea.toUpperCase();
-
                 const user = await User.findOneAndUpdate(
                     {
                         _id: id,
@@ -74,20 +72,25 @@ const addTask = async (req, res) => {
                     },
                     {
                         $addToSet: {
-                            'tareas.$.tareasDelUsuario': task
+                            'tareas.$.tareasDelUsuario': tarea.toUpperCase()
                         }
                     },
                     {
                         new: true
                     }).exec();
 
-                console.log("TAREAS LENGHT",event.tareasDelUsuario.length);
-                console.log("TAREAAS DESPUES", user.tareas[indexEvent].tareasDelUsuario.length);
+                const initialTasksList = event.tareasDelUsuario.length;
+                const updatedTasksList = user.tareas[indexEvent].tareasDelUsuario.length;
 
-                return res.json({
-                    message: `El user ${userCheck.usuario} agrego la tarea ${tarea} a un evento existente`,
-                    user
-                })
+                if (initialTasksList === updatedTasksList) {
+                    return res.json({
+                        message: "La tarea ya existe en el evento"
+                    })
+                } else {
+                    return res.json({
+                        message: `El user ${user.usuario} agrego la tarea ${tarea} a un evento existente`
+                    })
+                }
             };
         }
 
