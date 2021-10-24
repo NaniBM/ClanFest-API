@@ -41,7 +41,7 @@ router.get('/gettasks/:id', getTasks);
 router.patch('/addtask/:id/:eventId', addTask);
 
 // borrar tarea
-router.patch('/deleteTask/:id/:eventId', deleteTask);
+router.patch('/deletetask/:id/:eventId', deleteTask);
 
 // agregar evento a favorito
 router.patch('/addfavourite/:id/:eventId', addFavourite);
