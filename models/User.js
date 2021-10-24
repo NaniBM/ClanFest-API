@@ -50,7 +50,7 @@ const userSchema = new Schema({
   },
   tareas: [{
     eventId: {
-      type: Schema.Types.ObjectId,
+      type: [Schema.Types.ObjectId],
       ref: 'Event'
     },
     tareasDelUsuario: {
@@ -63,7 +63,7 @@ const userSchema = new Schema({
   },
   eventosCreados: {
     type: [Schema.Types.OjectId],
-    ref: 'Event', //array de event._id
+    ref: 'Event' //array de event._id
   },
   eventsFavoritos: {
     type: [Schema.Types.OjectId],

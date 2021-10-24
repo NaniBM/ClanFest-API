@@ -16,7 +16,6 @@ const getFavouritesEvents = async (req, res) => {
         if (favouritesEvents.length === 0) {
             return res.json({
                 message: "El usario no tiene eventos favoritos",
-                favouritesEvents
             });
         } else {
             return res.json({
