@@ -1,7 +1,11 @@
 const express = require('express');
-const { getUsers, getFavouritesEvents, getUserById, deleteUser, editUser, removeFavourite, addFavourite, getUserEvents, getUserEventsToAssist} = require('../Controllers/UsersController');
 
 const router = express.Router();
+
+const { getUsers, getUserById, deleteUser, editUser } = require('../Controllers/UsersControllers/UserController');
+const { getFavouritesEvents, removeFavourite, addFavourite } = require('../Controllers/UsersControllers/FavoritesController');
+const { addTask, getTasks, deleteTask } = require('../Controllers/UsersControllers/TaskController');
+const { getEvents, getEventsToAssist, addEventToAssist } = require('../Controllers/UsersControllers/EventsController');
 
 // trae todos los users
 router.get('/', getUsers);
@@ -15,19 +19,31 @@ router.delete('/delete/:id', deleteUser);
 // editar user
 router.put('/edit/:id', editUser);
 
-// agregar evento a favorito
-router.put('/addfavourite/:id/:eventId', addFavourite);
-
-// borrar evento de favorito
-router.put('/removefavourite/:id/:eventId', removeFavourite);
-
 // traer todos los favoritos de un user
 router.get('/favouritesevents/:id', getFavouritesEvents);
 
 // traer todos los eventos de un user
-router.get('/userevents/:id', getUserEvents);
+router.get('/userevents/:id', getEvents);
 
 // traer todos los eventos a asistir de un user
-router.get('/usereventstoassist/:id', getUserEventsToAssist);
+router.get('/usereventstoassist/:id', getEventsToAssist);
+
+// agregar evento a asistir
+router.patch('/addeventstoassist/:id/:eventId', addEventToAssist);
+
+// traer tareas de un user
+router.get('/gettasks/:id', getTasks);
+
+// crear tarea de un user
+router.patch('/addtask/:id/:eventId', addTask);
+
+// borrar tarea
+router.patch('/deleteTask/:id', deleteTask);
+
+// agregar evento a favorito
+router.patch('/addfavourite/:id/:eventId', addFavourite);
+
+// borrar evento de favorito
+router.patch('/removefavourite/:id/:eventId', removeFavourite);
 
 module.exports = router;
