@@ -1,4 +1,5 @@
 const User = require('../../models/User');
+const {addAssistant, deleteAssistant} = require('../EventsControllers/AssisController')
 
 const getEvents = async (req, res) => {
 
@@ -83,6 +84,8 @@ const addEventToAssist = async (req, res) => {
             }
             ).exec();
 
+            await addAssistant(id, eventId);
+
             return res.json({
                 message: `${user.usuario} agrego un nuevo evento a asistir`
             });
@@ -100,4 +103,22 @@ const addEventToAssist = async (req, res) => {
     }
 };
 
-module.exports = { getEventsToAssist, getEvents, addEventToAssist };
+const deleteEventToAssist = async (req, res) => {
+    try{
+        const {id, eventId} = req.params;
+
+        const user = await User.findByIdAndUpdate(id, {
+            $pull: {
+                eventosaAsistir: eventId
+        }});
+
+        await deleteAssistant(id, eventId);
+
+        res.json({
+            message: `Se elimino el evento con exito`
+        })
+    }catch(err){
+        console.log(err)
+    }
+}
+module.exports = { getEventsToAssist, getEvents, addEventToAssist, deleteEventToAssist };

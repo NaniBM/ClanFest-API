@@ -66,17 +66,12 @@ const eventSchema = new Schema({
   },
   asistentes: [{
     usuario: {
-      type: Schema.Types.ObjectId,
+      type: [Schema.Types.ObjectId],
       ref: 'User'
     },
     tareasDelUsuario: {
-<<<<<<< HEAD
       type:[]
     }
-=======
-      type: []
-    }, 
->>>>>>> 4f099232b212b442fd764405a6663fc54d54bf4a
   }],
   imagen: {
     type: String,
