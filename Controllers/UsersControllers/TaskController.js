@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const User = require('../../models/User');
+const {addTaskEvent, deleteTaskEvent} = require('../EventsControllers/TaskController')
 
 const getTasks = async (req, res) => {
 
@@ -57,6 +58,8 @@ const addTask = async (req, res) => {
                     }
                 }).exec();
 
+                await addTaskEvent(id, eventId, tarea);
+
                 return res.json({
                     message: `El user ${user.usuario} agrego la tarea ${tarea} a un evento nuevo`
                 });
@@ -74,6 +77,8 @@ const addTask = async (req, res) => {
                         }
                     }).exec();
 
+                await addTaskEvent(id, eventId, tarea);
+
                 return res.json({
                     message: `El user ${userCheck.usuario} agrego la tarea ${tarea} a un evento existente`
                 })
@@ -85,6 +90,7 @@ const addTask = async (req, res) => {
         })
 
     } catch (err) {
+        console.log(err)
         res.json({
             message: "Error al crear tarea"
         })
@@ -96,28 +102,38 @@ const deleteTask = async (req, res) => {
 
     try {
 
-        const { id } = req.params;
-        const { task } = req.query;
+        const { id, eventId } = req.params;
+        const { tarea } = req.body;
+        
+        // const result = await User.findById(id).where('tareas').equals(tarea).exec();
 
-        const result = await User.findById(id).where('tareas').equals(task).exec();
-
-        if (result === null) {
-            return res.json({
-                message: "La tarea no existe"
-            })
-        } else {
-            const user = await User.findByIdAndUpdate(id, {
-                // funcion para poder eliminar elementos de una propiedad array de un Model
-                $pull: {
-                    tareas: task
-                }
-            }
+        // if (result === null) {
+        //     return res.json({
+        //         message: "La tarea no existe"
+        //     })
+        // } else {
+            const user = await User.findByIdAndUpdate(id, 
+                {'$pull': {"tareas.$[event].tareasDelUsuario": tarea}},
+                { 'arrayFilters' : [ {"event.eventId" : ObjectId(eventId) }],
+                multi : false }
             );
+            // const user = await User.findOneAndUpdate(
+            //     {
+            //         _id: id,
+            //         'tareas.eventId': ObjectId(eventId)
+            //     },
+            //     {
+            //         $pull: {
+            //             'tareas.$.tareasDelUsuario': tarea
+            //         }
+            //     }).exec();
+
+            await deleteTaskEvent(id, eventId, tarea);
 
             return res.json({
-                message: `${user.usuario} borro la tarea ${task}`
+                message: `${user.usuario} borro la tarea ${tarea}`
             });
-        }
+        // }
 
     }
     catch (err) {

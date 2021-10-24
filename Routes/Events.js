@@ -3,7 +3,7 @@ const { Router } = require('express');
 const router = Router();
 
 const {addEvents, getEvents, getEventDetail, putEditEvent, deleteEvent} = require("../Controllers/EventsControllers/EventController")
-const {getAssistans, putDeleteAssistans} = require("../Controllers/EventsControllers/AssisController")
+const {getAssistans} = require("../Controllers/EventsControllers/AssisController")
 //ruta para traer todos los eventos
 router.get("/", getEvents);
 
@@ -18,9 +18,6 @@ router.get('/assistans/:id', getAssistans);
 
 //ruta para editar informacion del evento
 router.put('/edit/:id', putEditEvent);
-
-//ruta para eliminar asistentes de un evento
-router.put('/assistans/delete/:id', putDeleteAssistans);
 
 //ruta para borrar un evento
 router.delete('/delete/:id', deleteEvent);

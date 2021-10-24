@@ -1,8 +1,24 @@
 const Event = require('../../models/Event');
-const User = require('../../models/User');
+const { ObjectId } = require('mongodb');
 
+const addAssistant = async function (uid, eid){
+    try{
+        const addUser = await Event.findByIdAndUpdate(eid, {
+            $push: {
+                asistentes: [{
+                    usuario: uid
+                }]
+            }
+        }).exec();
 
+        return
 
+    }catch (err) {
+        res.json({
+            message: "Error al crear tarea"
+        })
+    }
+};
 
 const getAssistans = async function(req, res){
     try{
@@ -21,33 +37,22 @@ const getAssistans = async function(req, res){
     };
 };
 
-
-
-const putDeleteAssistans = async function(req, res){
+const deleteAssistant = async function (uid, eid){
     try{
-        const {uid} = req.body;
-        const {id} = req.params;
-        const listAssist = await Event.findById(id, "asistentes");
-
-        if(!listAssist.asistentes.length){
-            return res.json({
-                message: "Este evento no tiene asistentes"
+        const event = await Event.findOneAndUpdate(
+            {
+                _id: eid,
+                'asistentes.usuario': ObjectId(uid)
+            },
+            {
+                $pull: {
+                    'asistentes':{
+                        usuario: ObjectId(uid)
+                    }
+                }
             });
-        }
-
-        const event = await Event.findByIdAndUpdate(id, {
-            $pull: {
-                asistentes: uid
-            }});
         
-        const user = await User.findOneAndUpdate(uid, {
-            $pull: {
-                eventosaAsistir: id
-            }});
-        
-        return res.json({
-            message: `${user.usuario} fue eliminado del evento ${event.nombreDelEvento} con exito`
-        });
+        return
     }
     catch (err) {
         console.log(err);
@@ -58,5 +63,6 @@ const putDeleteAssistans = async function(req, res){
 
 module.exports = {
     getAssistans,
-    putDeleteAssistans
+    deleteAssistant,
+    addAssistant
 }
