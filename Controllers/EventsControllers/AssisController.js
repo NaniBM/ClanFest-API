@@ -22,7 +22,10 @@ const addAssistant = async function (uid, eid){
 
 const getAssistans = async function(req, res){
     try{
-        const list = await Event.findById(req.params.id, "asistentes");
+        const list = await Event.findById(req.params.id, "asistentes").populate('asistentes.usuario',{
+            usuario: 1
+        });
+
         if (!list.asistentes.length) {
             return res.json({
                 message: "Este evento no tiene asistentes"

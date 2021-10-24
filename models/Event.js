@@ -66,7 +66,7 @@ const eventSchema = new Schema({
   },
   asistentes: [{
     usuario: {
-      type: [Schema.Types.ObjectId],
+      type: Schema.Types.ObjectId,
       ref: 'User'
     },
     tareasDelUsuario: {
