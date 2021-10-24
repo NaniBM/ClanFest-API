@@ -1,8 +1,6 @@
 const Event = require('../../models/Event');
 const { ObjectId } = require('mongodb');
 
-<<<<<<< HEAD
-=======
 const addAssistant = async function (uid, eid){
     try{
         const addUser = await Event.findByIdAndUpdate(eid, {
@@ -22,7 +20,6 @@ const addAssistant = async function (uid, eid){
     }
 };
 
->>>>>>> 9b811cd9bc673013b3233457b0f21029b2e98d64
 const getAssistans = async function(req, res){
     try{
         const list = await Event.findById(req.params.id, "asistentes");
@@ -40,11 +37,7 @@ const getAssistans = async function(req, res){
     };
 };
 
-<<<<<<< HEAD
-const putDeleteAssistans = async function(req, res){
-=======
 const deleteAssistant = async function (uid, eid){
->>>>>>> 9b811cd9bc673013b3233457b0f21029b2e98d64
     try{
         const event = await Event.findOneAndUpdate(
             {
