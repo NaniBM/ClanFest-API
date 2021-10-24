@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 
-const getUserEvents = async (req, res) => {
+const getEvents = async (req, res) => {
 
     try {
 
@@ -15,8 +15,7 @@ const getUserEvents = async (req, res) => {
 
         if (createdEvents.length === 0) {
             return res.json({
-                message: "El usuario no tiene eventos creados",
-                createdEvents
+                message: "El usuario no tiene eventos creados"
             });
         } else {
             return res.json({
@@ -33,7 +32,7 @@ const getUserEvents = async (req, res) => {
 
 };
 
-const getUserEventsToAssist = async (req, res) => {
+const getEventsToAssist = async (req, res) => {
 
     try {
 
@@ -49,11 +48,10 @@ const getUserEventsToAssist = async (req, res) => {
         if (eventsToAssist.length === 0) {
             return res.json({
                 message: "El usuario no asiste a ningun evento",
-                eventsToAssist
             });
         } else {
             return res.json({
-                message: "Se han encontrado eventos",
+                message: "Se han encontrado eventos a asistir",
                 eventsToAssist
             });
         }
@@ -102,36 +100,4 @@ const addEventToAssist = async (req, res) => {
     }
 };
 
-const deleteEventToAssist = async (req, res) => {
-    try {
-
-        const { id, eventId } = req.params;
-
-        const result = await User.findById(id).where('eventosaAsistir').equals(eventId).exec();
-
-        if (result === null) {
-            return res.json({
-                message: "El evento no se encuentra como evento a asistir"
-            })
-        } else {
-            const user = await User.findByIdAndUpdate(id, {
-                // funcion para poder eliminar elementos de una propiedad array de un Model
-                $pull: {
-                    eventosaAsistir: eventId
-                }
-            }
-            );
-
-            return res.json({
-                message: `${user.usuario} dejará de asistir a asistir a este evento`
-            });
-        }
-
-    } catch (err) {
-        res.json({
-            message: "Error al borrar un evento a asistir"
-        })
-    }
-}
-
-module.exports = { getUserEventsToAssist, getUserEvents, addEventToAssist, deleteEventToAssist };
+module.exports = { getEventsToAssist, getEvents, addEventToAssist };
