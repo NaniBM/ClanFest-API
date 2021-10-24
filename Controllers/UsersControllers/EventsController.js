@@ -1,6 +1,7 @@
 const User = require('../../models/User');
 const {addAssistant, deleteAssistant} = require('../EventsControllers/AssisController')
 
+
 const getEvents = async (req, res) => {
 
     try {

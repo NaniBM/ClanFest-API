@@ -62,8 +62,6 @@ const deleteAssistant = async function (uid, eid){
     };
 };
 
-
-
 module.exports = {
     getAssistans,
     deleteAssistant,
