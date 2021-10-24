@@ -59,7 +59,7 @@ const addTask = async (req, res) => {
                     }
                 }).exec();
 
-                /* await addTaskEvent(id, eventId, tarea); */
+                await addTaskEvent(id, eventId, tarea);
 
                 return res.json({
                     message: `El user ${user.usuario} agrego la tarea ${tarea} a un evento nuevo`
@@ -82,6 +82,8 @@ const addTask = async (req, res) => {
                     {
                         new: true
                     }).exec();
+
+                    await addTaskEvent(id, eventId, tarea);
 
                 const initialTasksList = event.tareasDelUsuario.length;
                 const updatedTasksList = user.tareas[indexEvent].tareasDelUsuario.length;
@@ -116,7 +118,7 @@ const deleteTask = async (req, res) => {
     try {
 
         const { id, eventId } = req.params;
-        const { tarea } = req.body;
+        const { tarea } = req.query;
         
         // const result = await User.findById(id).where('tareas').equals(tarea).exec();
 

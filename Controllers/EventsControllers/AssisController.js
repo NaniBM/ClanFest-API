@@ -26,7 +26,7 @@ const getAssistans = async function(req, res){
             usuario: 1
         });
 
-        if (!list.asistentes.length) {
+        if (!list) {
             return res.json({
                 message: "Este evento no tiene asistentes"
             });
