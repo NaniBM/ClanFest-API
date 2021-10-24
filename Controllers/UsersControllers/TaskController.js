@@ -66,21 +66,32 @@ const addTask = async (req, res) => {
 
             } else {
 
-                await User.findOneAndUpdate(
+                const indexEvent = userCheck.tareas.findIndex(e => e.eventId.toString() === eventId);
+
+                const task = tarea.toUpperCase();
+
+                const user = await User.findOneAndUpdate(
                     {
                         _id: id,
                         'tareas.eventId': ObjectId(eventId)
                     },
                     {
-                        $push: {
-                            'tareas.$.tareasDelUsuario': tarea
+                        $addToSet: {
+                            'tareas.$.tareasDelUsuario': task
                         }
+                    },
+                    {
+                        new: true
                     }).exec();
 
-                await addTaskEvent(id, eventId, tarea);
+
+                console.log("TAREAS LENGHT",event.tareasDelUsuario.length);
+                console.log("TAREAAS DESPUES", user.tareas[indexEvent].tareasDelUsuario.length);
+
 
                 return res.json({
-                    message: `El user ${userCheck.usuario} agrego la tarea ${tarea} a un evento existente`
+                    message: `El user ${userCheck.usuario} agrego la tarea ${tarea} a un evento existente`,
+                    user
                 })
             };
         }

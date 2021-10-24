@@ -103,6 +103,33 @@ const addEventToAssist = async (req, res) => {
     }
 };
 
+const putDeleteAssistans = async function(req, res){
+    try{
+        const {uid} = req.body;
+        const {id} = req.params;
+        const listAssist = await Event.findById(id, "asistentes");
+        if(!listAssist.asistentes.length){
+            return res.json({
+                message: "Este evento no tiene asistentes"
+            });
+        }
+        const event = await Event.findByIdAndUpdate(id, {
+            $pull: {
+                asistentes: uid
+            }});
+        const user = await User.findOneAndUpdate(uid, {
+            $pull: {
+                eventosaAsistir: id
+            }});
+        return res.json({
+            message: `${user.usuario} fue eliminado del evento ${event.nombreDelEvento} con exito`
+        });
+    }
+    catch (err) {
+        console.log(err);
+    };
+};
+
 const deleteEventToAssist = async (req, res) => {
     try{
         const {id, eventId} = req.params;
