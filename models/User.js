@@ -50,11 +50,11 @@ const userSchema = new Schema({
   },
   tareas: [{
     eventId: {
-      type: [Schema.Types.OjectId],
+      type: Schema.Types.ObjectId,
       ref: 'Event'
     },
     tareasDelUsuario: {
-      type: []
+      type: [String]
     }
   }],
   fechaDeCreacion: {
