@@ -1,7 +1,7 @@
 const Event = require('../../models/Event');
 const { ObjectId } = require('mongodb');
 
-const addTaskEvent = async function(uid, eid, tarea) {
+const addTaskEvent = async function (uid, eid, tarea) {
 
     try {
 
@@ -12,27 +12,30 @@ const addTaskEvent = async function(uid, eid, tarea) {
                 'asistentes.usuario': ObjectId(uid)
             },
             {
-                $push: {
-                    'asistentes.$.tareasDelUsuario': tarea
+                $addToSet: {
+                    'asistentes.$.tareasDelUsuario': tarea.toUpperCase()
                 }
             }).exec();
-        
-        return
+
+        return;
 
     } catch (err) {
         console.log(err);
     };
 };
 
-const deleteTaskEvent = async function(uid, eid, tarea) {
+const deleteTaskEvent = async function (uid, eid, tarea) {
 
     try {
-        const deleteTask = await Event.findByIdAndUpdate(eid, 
-            {'$pull': {"asistentes.$[user].tareasDelUsuario": tarea}},
-            { 'arrayFilters' : [ {"user.usuario" : ObjectId(uid) }],
-            multi : false }
+        const deleteTask = await Event.findByIdAndUpdate(eid,
+            { '$pull': { "asistentes.$[user].tareasDelUsuario": tarea.toUpperCase() } },
+            {
+                'arrayFilters': [{ "user.usuario": ObjectId(uid) }],
+                multi: false
+            }
         );
-        return 
+
+        return;
     }
     catch (err) {
         console.log(err);
