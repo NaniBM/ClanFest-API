@@ -64,10 +64,15 @@ const eventSchema = new Schema({
   invitados: {
     type: Number
   },
-  asistentes: {
-    type: [Schema.Types.ObjectId],
-    ref: 'User' 
-  },
+  asistentes: [{
+    usuario: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    tareasDelUsuario: {
+      type: []
+    }, 
+  }],
   imagen: {
     type: String,
     default: "https://images.unsplash.com/photo-1572575156811-2ae050d748d8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80"
