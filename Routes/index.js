@@ -9,5 +9,4 @@ router.use('/api/users', usersRoutes);
 router.use('/events', eventsRoutes);
 router.use('/api/auth', require('./auth'));
 
-
 module.exports = router;

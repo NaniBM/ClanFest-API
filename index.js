@@ -1,13 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config();
+const http = require("http");
+const socketIo = require("socket.io");
+const router = require("./Routes/index");
+
 
 const app = express();
+const server = http.createServer(app);
+
+const io = socketIo(server,{
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+}
+});
+
 
 // importacion de rutas
-const router = require("./Routes/index");
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URI,{
@@ -15,6 +28,49 @@ mongoose.connect(process.env.DB_URI,{
 })
 .then(db => console.log('BD conectada'))
 .catch(error => console.error(error))
+
+
+//Socket.io ------------------------------------
+//Socket.io conexion
+
+let users = [];
+const addNewUser = (uid, username, socketID) =>{
+  !users.some(user=> user.uid ===  uid) && 
+  users.push({uid, username, socketID})
+}
+
+const deleteUsers = (socketID) =>{
+ users = users.filter(user => user.socketID !== socketID )
+}
+
+const getUser = ( uid ) => {users.find( user => user.username === uid)}
+
+io.on('connection', (socket) => {
+  console.log('Conexion a socket.io')
+  socket.on("newUser", (uid, username)=>{
+    addNewUser(uid, username, socket.id)
+  })
+
+  socket.on("postNotification", ({senderName, username, message})=>{
+    const receiver = getUser(username)
+    io.to(receiver.socketID).emit("getNotification",{
+      senderName,
+      message
+    })
+  })
+  
+  socket.on("disconnect", () => {
+    deleteUsers(socket.id)
+    console.log("Client disconnected");
+  });
+});
+
+
+
+
+
+
+//----------------------------------------------
 //habilitar body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
@@ -31,9 +87,12 @@ app.use((req, res, next) => {
 
 //habilitar cors
 app.use(cors({origin: '*'}));
+
 app.use(router);
 
 const port = process.env.PORT || 3008;
-app.listen(port, function(){
+server.listen(port, function(){
     console.log('servidor escuchando en puerto:', port)
 })
+
+module.exports = io;
