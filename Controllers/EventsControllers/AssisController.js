@@ -1,9 +1,6 @@
 const Event = require('../../models/Event');
 const User = require('../../models/User');
 
-
-
-
 const getAssistans = async function(req, res){
     try{
         const list = await Event.findById(req.params.id, "asistentes");
@@ -20,8 +17,6 @@ const getAssistans = async function(req, res){
         console.log(err);
     };
 };
-
-
 
 const putDeleteAssistans = async function(req, res){
     try{
@@ -53,8 +48,6 @@ const putDeleteAssistans = async function(req, res){
         console.log(err);
     };
 };
-
-
 
 module.exports = {
     getAssistans,
