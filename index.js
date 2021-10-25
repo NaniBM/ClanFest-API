@@ -34,6 +34,7 @@ let users = [];
 const addNewUser = (uid, username, socketID) =>{
   !users.some(user=> user.uid ===  uid) && 
   users.push({uid, username, socketID})
+  console.log(users)
 }
 
 const deleteUsers = (socketID) =>{
@@ -41,28 +42,37 @@ const deleteUsers = (socketID) =>{
 }
 
 const getUser = ( uid ) => {
-  users.find( user => user.uid === uid)
+  return users.find( user => user.uid === uid)
+  
+ 
 }
 
-
 io.on('connection', (socket) => {
-  console.log('new user connected')
-  socket.on("newUser", (uid, username)=>{
-    addNewUser(uid, username, socket.id)
+  socket.on("newUser", (data)=>{
+    console.log('new user connected')
+    addNewUser(data.uid, data.usuario, socket.id)
   })
 
-  socket.on("postNotification", ({senderName, uidReceiver, message})=>{
-    const receiver = getUser(uidReceiver)    
+socket.on("postNotification", (data)=>{
+     console.log(data.uid)
+    const receiver = getUser(data.uid)
+    console.log(receiver, data.message) 
+   if(!receiver) {
+     addNotification(data.uid, data.message)
+   } else {
+     console.log(data.message) 
     io.to(receiver.socketID).emit("getNotification",{
-        senderName,
-        message
+        message: data.message
       })
+   }
+    
     })
+
   socket.on("disconnect", () => {
     deleteUsers(socket.id)
     console.log("Client disconnected");
   });
-});
+})
 
 
 

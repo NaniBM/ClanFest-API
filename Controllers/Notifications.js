@@ -16,11 +16,11 @@ const getNotification = async (uid) => {
   }
 };
 
-const addNotification = async (senderName, uidReceiver, message) => {
+const addNotification = async (uid, message) => {
   try {
-     await User.findByIdAndUpdate(uidReceiver, {
+     await User.findByIdAndUpdate(uid, {
       $push: {
-        notificaciones: {senderName, message}
+        notificaciones: message
       },
     }).exec();
   } catch (err) {
