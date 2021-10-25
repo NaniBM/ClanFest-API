@@ -10,6 +10,9 @@ const getEvents = async (req, res) => {
 
         const result = await User.findById(id).populate('eventosCreados', {
             nombreDelEvento: 1,
+            imagen:1,
+            fechaDeCreacion: 1,
+            precio: 1,
             _id: 1
         }).exec();
 
