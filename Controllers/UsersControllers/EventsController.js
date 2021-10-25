@@ -104,25 +104,6 @@ const addEventToAssist = async (req, res) => {
     }
 };
 
-const deleteEvent = async (uid, id) => {
-    try {
-
-        const event = await Event.findByIdAndUpdate(id, {
-            $pull: {
-                asistentes: uid
-            }
-        });
-        
-        const user = await User.findOneAndUpdate(uid);
-
-        return;
-
-    }
-    catch (err) {
-        console.log(err);
-    };
-};
-
 const deleteEventToAssist = async (req, res) => {
     try {
         const { id, eventId } = req.params;
@@ -135,11 +116,13 @@ const deleteEventToAssist = async (req, res) => {
 
         await deleteAssistant(id, eventId);
 
-        res.json({
-            message: `Se elimino el evento con exito`
+        return res.json({
+            message: `El ${user.usuario} dejo de asistir a un evento`
         })
     } catch (err) {
-        console.log(err)
+        return res.json({
+            message: "Error al eliminar un evento a asistir"
+        })
     }
 }
 
