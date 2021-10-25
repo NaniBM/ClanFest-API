@@ -39,6 +39,7 @@ const addTask = async (req, res) => {
 
         const { id, eventId } = req.params;
         const { tarea } = req.body;
+        console.log(tarea)
 
         // verifico que la tarea no se encuentre ya dentro del array de tareas
         const userCheck = await User.findById(id).exec();
