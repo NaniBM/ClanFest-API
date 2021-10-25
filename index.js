@@ -6,6 +6,7 @@ const cors = require('cors');
 const http = require("http");
 const socketIo = require("socket.io");
 const router = require("./Routes/index");
+const {addNotification, getNotification} =require("./Controllers/Notifications")
 
 
 const app = express();
@@ -19,9 +20,6 @@ const io = socketIo(server,{
 });
 
 
-// importacion de rutas
-
-
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_URI,{
     useNewUrlParser: true,
@@ -32,7 +30,6 @@ mongoose.connect(process.env.DB_URI,{
 
 //Socket.io ------------------------------------
 //Socket.io conexion
-
 let users = [];
 const addNewUser = (uid, username, socketID) =>{
   !users.some(user=> user.uid ===  uid) && 
@@ -43,22 +40,24 @@ const deleteUsers = (socketID) =>{
  users = users.filter(user => user.socketID !== socketID )
 }
 
-const getUser = ( uid ) => {users.find( user => user.username === uid)}
+const getUser = ( uid ) => {
+  users.find( user => user.uid === uid)
+}
+
 
 io.on('connection', (socket) => {
-  console.log('Conexion a socket.io')
+  console.log('new user connected')
   socket.on("newUser", (uid, username)=>{
     addNewUser(uid, username, socket.id)
   })
 
-  socket.on("postNotification", ({senderName, username, message})=>{
-    const receiver = getUser(username)
+  socket.on("postNotification", ({senderName, uidReceiver, message})=>{
+    const receiver = getUser(uidReceiver)    
     io.to(receiver.socketID).emit("getNotification",{
-      senderName,
-      message
+        senderName,
+        message
+      })
     })
-  })
-  
   socket.on("disconnect", () => {
     deleteUsers(socket.id)
     console.log("Client disconnected");

@@ -1,10 +1,10 @@
 const User = require("../models/User");
 
 
-const getNotification = async (username) => {
+const getNotification = async (uid) => {
     console.log(`get-notificaciones:`)
   try {
-    const notificaciones = await User.findOne({usuario: username}, "notificaciones");
+    const notificaciones = await User.findByYId(uid, "notificaciones");
    
     if (!notificaciones.length) {
       return "No tienes notificaciones"
@@ -16,19 +16,13 @@ const getNotification = async (username) => {
   }
 };
 
-const addNotification = async (req, re) => {
+const addNotification = async (senderName, uidReceiver, message) => {
   try {
-    const { id, usuario, notificacion } = req.body;
-    console.log(`add-Notificacion: id: ${id}, usuario: ${usuario}, notificacion: ${notificacion}`)
-
-    await User.findByIdAndUpdate(id, {
+     await User.findByIdAndUpdate(uidReceiver, {
       $push: {
-        notificaciones: notificacion,
+        notificaciones: {senderName, message}
       },
     }).exec();
-
-    io.emit("Notificacion", `${usuario} te ha añadido una tarea: ${notificacion}`);
-    res.sendStatus(200);
   } catch (err) {
     console.log(err);
   }
