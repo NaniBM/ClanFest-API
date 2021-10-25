@@ -1,5 +1,5 @@
 const User = require('../../models/User');
-const {addAssistant, deleteAssistant} = require('../EventsControllers/AssisController')
+const { addAssistant, deleteAssistant } = require('../EventsControllers/AssisController')
 
 
 const getEvents = async (req, res) => {
@@ -104,27 +104,19 @@ const addEventToAssist = async (req, res) => {
     }
 };
 
-const putDeleteAssistans = async function(req, res){
-    try{
-        const {uid} = req.body;
-        const {id} = req.params;
-        const listAssist = await Event.findById(id, "asistentes");
-        if(!listAssist.asistentes.length){
-            return res.json({
-                message: "Este evento no tiene asistentes"
-            });
-        }
+const deleteEvent = async (uid, id) => {
+    try {
+
         const event = await Event.findByIdAndUpdate(id, {
             $pull: {
                 asistentes: uid
-            }});
-        const user = await User.findOneAndUpdate(uid, {
-            $pull: {
-                eventosaAsistir: id
-            }});
-        return res.json({
-            message: `${user.usuario} fue eliminado del evento ${event.nombreDelEvento} con exito`
+            }
         });
+        
+        const user = await User.findOneAndUpdate(uid);
+
+        return;
+
     }
     catch (err) {
         console.log(err);
@@ -132,21 +124,23 @@ const putDeleteAssistans = async function(req, res){
 };
 
 const deleteEventToAssist = async (req, res) => {
-    try{
-        const {id, eventId} = req.params;
+    try {
+        const { id, eventId } = req.params;
 
         const user = await User.findByIdAndUpdate(id, {
             $pull: {
                 eventosaAsistir: eventId
-        }});
+            }
+        });
 
         await deleteAssistant(id, eventId);
 
         res.json({
             message: `Se elimino el evento con exito`
         })
-    }catch(err){
+    } catch (err) {
         console.log(err)
     }
 }
+
 module.exports = { getEventsToAssist, getEvents, addEventToAssist, deleteEventToAssist };
