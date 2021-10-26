@@ -23,7 +23,7 @@ const getMercadoPagoLink = async (req, res) => {
         mercadopago.preferences.create(preference, (err, response) => {
             if (err) {
                 res.json({
-                    message: "Error al crear Link",
+                    message: "Error al crsear Link",
                     err
                 })
             }
