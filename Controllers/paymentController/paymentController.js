@@ -2,6 +2,8 @@ const mercadopago = require('mercadopago');
 
 const getMercadoPagoLink = async (req, res) => {
 
+    const {title, price, quantity} = req.body;
+
     try {
 
         // agregar credenciales
@@ -12,10 +14,10 @@ const getMercadoPagoLink = async (req, res) => {
         var preference = {
             items: [
                 {
-                    title: 'Test',
-                    quantity: 1,
-                    currency_id: 'MXN',
-                    unit_price: 10.5
+                    title: title,
+                    quantity: quantity,
+                    currency_id: 'ARS',
+                    unit_price: price
                 }
             ]
         };
@@ -23,7 +25,7 @@ const getMercadoPagoLink = async (req, res) => {
         mercadopago.preferences.create(preference, (err, response) => {
             if (err) {
                 res.json({
-                    message: "Error al crsear Link",
+                    message: "Error al crear Link",
                     err
                 })
             }
