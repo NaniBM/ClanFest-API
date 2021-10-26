@@ -74,7 +74,7 @@ const userSchema = new Schema({
     ref: 'Event' //array de event._id
   },
   notificaciones: {
-    type: String
+    type: [String]
   }
 });
 
