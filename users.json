@@ -1,0 +1,15 @@
+{
+    "id": 1007012336,
+    "nickname": "TESTOHHSK9JY",
+    "password": "qatest7337",
+    "site_status": "active",
+    "email": "test_user_86035707@testuser.com",
+    "production": {
+        "access_token": "APP_USR-8280527144669781-102602-1cff7e44b81391959d3d50ecffe2c8da-1007012336",
+        "public_key": "APP_USR-47c94d46-7237-4637-a896-ca150f2c13f8",
+        "clientID": "8280527144669781",
+        "client_secret": "5CJnuR98tZ5eE6c0oqaM00zgh8N2tSyt"
+    }
+
+}
+
