@@ -60,7 +60,7 @@ const getEventDetail = async function(req, res){
         if(req.params.id.length !== 24) return res.json({message: "No existe el evento buscado"});
 
         const detail = await Event.findById(req.params.id);
-        console.log(detail)
+        
         if (!detail) {
             return res.json({
                 message: "No existe el evento buscado"

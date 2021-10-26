@@ -36,7 +36,7 @@ const userSchema = new Schema({
     required: true,
     validate:{
       validator:(password)=>{
-        const ck_password =/^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,16}$/ 
+        const ck_password =/^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,30}$/ 
         if(password.match(ck_password)){
           return true
         }
@@ -48,16 +48,22 @@ const userSchema = new Schema({
     type: String,
     default: "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
   },
-  tareas: {
-    type: [],
-  },
+  tareas: [{
+    eventId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Event'
+    },
+    tareasDelUsuario: {
+      type: [String]
+    }
+  }],
   fechaDeCreacion: {
     type: Date,
     default: new Date(),
   },
   eventosCreados: {
     type: [Schema.Types.OjectId],
-    ref: 'Event', //array de event._id
+    ref: 'Event' //array de event._id
   },
   eventsFavoritos: {
     type: [Schema.Types.OjectId],
@@ -67,6 +73,9 @@ const userSchema = new Schema({
     type: [Schema.Types.OjectId],
     ref: 'Event' //array de event._id
   },
+  notificaciones: {
+    type: [String]
+  }
 });
 
 module.exports = model("User", userSchema);

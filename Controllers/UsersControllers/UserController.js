@@ -4,10 +4,15 @@ const bcrypt = require('bcryptjs');
 const getUsers = async (req, res) => {
     try {
         const users = await User.find().exec();
-        return res.json(users)
+        if (users.length === 0) {
+            return res.json({
+                message: "No se han encontrado usuarios"
+            })
+        } else {
+            return res.json(users)
+        }
     } catch (err) {
         res.json({
-            error: err,
             message: "Error al buscar users"
         })
     }
@@ -19,30 +24,23 @@ const getUserById = async (req, res) => {
         const { id } = req.params;
 
         // crea variable con la consulta para evitar error por consola "querry was already executed"
-        const findByIdQuery = User.findById(id, (err, user) => {
+        const user = await User.findById(id).exec();
 
-            if (err) throw err;
+        if (!user) {
+            return res.status.json({
+                message: "No se ha encontrado ningun usuario"
+            })
+        } else {
+            return res.json({
+                message: "Usuario encontrado",
+                user
+            })
+        }
 
-            if (!user) {
-                return res.status(400).json({
-                    message: "No se ha encontrado ningun usuario"
-                })
-            }
-
-            if (user) {
-                return res.status(200).json({
-                    message: "Usuario encontrado",
-                    user
-                })
-            }
-        });
-
-        // ejecucion de la consulta
-        await findByIdQuery.clone()
     } catch (err) {
         res.json({
             error: err,
-            message: "Error al buscar por ID"
+            message: "Error al buscar user por ID"
         })
     };
 
