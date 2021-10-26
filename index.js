@@ -42,9 +42,7 @@ const deleteUsers = (socketID) =>{
 }
 
 const getUser = ( uid ) => {
-  return users.find( user => user.uid === uid)
-  
- 
+  return users.find( user => user.uid === uid) 
 }
 
 io.on('connection', (socket) => {
