@@ -22,7 +22,10 @@ const getMercadoPagoLink = async (req, res) => {
 
         mercadopago.preferences.create(preference, (err, response) => {
             if (err) {
-                console.log(err)
+                res.json({
+                    message: "Error al crear Link",
+                    err
+                })
             }
             res.json({ LinkMP: response.body.init_point })
         })
@@ -34,19 +37,4 @@ const getMercadoPagoLink = async (req, res) => {
     }
 };
 
-const webHook = async (req, res) => {
-
-    if (req.methdo === "POST") {
-        let body = "";
-        req.on("data", chunk => {
-            body += chunk.toString();
-        });
-        req.on("end", () => {
-            console.log(body, "webhook response");
-            res.end("ok")
-        })
-    }
-    return res.status(200);
-};
-
-module.exports = { webHook, getMercadoPagoLink };
+module.exports = { getMercadoPagoLink };
