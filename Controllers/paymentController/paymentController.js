@@ -7,8 +7,7 @@ const getMercadoPagoLink = async (req, res) => {
         // agregar credenciales
         mercadopago.configure({
             access_token: "APP_USR-8280527144669781-102602-1cff7e44b81391959d3d50ecffe2c8da-1007012336"
-        })
-
+        });
 
         var preference = {
             items: [
@@ -25,7 +24,7 @@ const getMercadoPagoLink = async (req, res) => {
             if (err) {
                 console.log(err)
             }
-            res.json({ message: response.body.init_point })
+            res.json({ LinkMP: response.body.init_point })
         })
 
     } catch (err) {
@@ -34,7 +33,6 @@ const getMercadoPagoLink = async (req, res) => {
         })
     }
 };
-
 
 const webHook = async (req, res) => {
 
@@ -50,6 +48,5 @@ const webHook = async (req, res) => {
     }
     return res.status(200);
 };
-
 
 module.exports = { webHook, getMercadoPagoLink };

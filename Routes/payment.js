@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {webHook, getMercadoPagoLink} = require('../Controllers/payControllers/paymentController')
+const {webHook, getMercadoPagoLink} = require('../Controllers/paymentControllers/paymentController')
 
 // crear nuevo link de pago
 router.post('/new', getMercadoPagoLink);
