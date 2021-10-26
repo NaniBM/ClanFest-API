@@ -36,7 +36,7 @@ const userSchema = new Schema({
     required: true,
     validate:{
       validator:(password)=>{
-        const ck_password =/^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,16}$/ 
+        const ck_password =/^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,30}$/ 
         if(password.match(ck_password)){
           return true
         }
@@ -73,6 +73,9 @@ const userSchema = new Schema({
     type: [Schema.Types.OjectId],
     ref: 'Event' //array de event._id
   },
+  notificaciones: {
+    type: [String]
+  }
 });
 
 module.exports = model("User", userSchema);
