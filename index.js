@@ -9,6 +9,7 @@ const router = require("./Routes/index");
 const {
   addNotification,
   getNotification,
+  cleanNotifications
 } = require("./Controllers/Notifications");
 
 const app = express();
@@ -33,22 +34,21 @@ mongoose
 //Socket.io conexion
 let users = [];
 const addNewUser = (uid, username, socketID) => {
-  !users.some((user) => user.uid === uid) &&
+  if(!users.some((user) => user.uid === uid)){   
     users.push({ uid, username, socketID });
-  console.log(users);
+  } 
 };
-
 const deleteUsers = (socketID) => {
   users = users.filter((user) => user.socketID !== socketID);
 };
-
 const getUser = (uid) => {
   return users.find((user) => user.uid === uid);
 };
 
 io.on("connection", (socket) => {
   socket.on("newUser", (data) => {
-    addNewUser(data.uid, data.usuario, socket.id);
+    addNewUser(data.uid, data.usuario, socket.id, io);
+    getNotification(data.uid, socket.id, io)    
   });
 
   socket.on("postNotification", (data) => {
@@ -58,10 +58,14 @@ io.on("connection", (socket) => {
       addNotification(data.uid, data.message);
     } else {
       io.to(receiver.socketID).emit("getNotification", {
-        message: data.message,
+        message: data.message,        
       });
     }
   });
+
+  socket.on("cleanNotifications", (uid)=>{
+   cleanNotifications(uid)
+  })
 
   socket.on("disconnect", () => {
     deleteUsers(socket.id);

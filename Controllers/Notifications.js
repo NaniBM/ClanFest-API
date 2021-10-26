@@ -1,13 +1,11 @@
 const User = require("../models/User");
 
-
-const getNotification = async (uid) => {
+const getNotification = async (uid, socketID, io) => {
   try {
-    const notificaciones = await User.findByYId(uid, "notificaciones");
-    if (!notificaciones.length) {
-      return "No tienes notificaciones"
-    } else {
-      return  notificaciones
+    const { notificaciones } = await User.findById(uid, "notificaciones");
+    if (notificaciones.length) {      
+      console.log(socketID);
+      io.to(socketID).emit("getNotifOfLine", notificaciones);
     }
   } catch (err) {
     console.error(err);
@@ -16,9 +14,9 @@ const getNotification = async (uid) => {
 
 const addNotification = async (uid, message) => {
   try {
-     await User.findByIdAndUpdate(uid, {
+    await User.findByIdAndUpdate(uid, {
       $push: {
-        notificaciones: message
+        notificaciones: message,
       },
     }).exec();
   } catch (err) {
@@ -26,5 +24,15 @@ const addNotification = async (uid, message) => {
   }
 };
 
+const cleanNotifications = async (id) => {
+  console.log(id);
+  try {
+    const user = await User.findById(id)
+    user.notificaciones = [];
+    await user.save()
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-module.exports = { getNotification, addNotification };
+module.exports = { getNotification, addNotification, cleanNotifications };
