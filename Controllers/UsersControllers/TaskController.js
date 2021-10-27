@@ -120,7 +120,7 @@ const deleteTask = async (req, res) => {
     try {
 
         const { id, eventId } = req.params;
-        const { tarea } = req.query;
+        const { tarea } = req.body;
 
         // verifico que la tarea no se encuentre ya dentro del array de tareas
         const userCheck = await User.findById(id).exec();
