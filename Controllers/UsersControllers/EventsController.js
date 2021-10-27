@@ -120,8 +120,6 @@ const deleteEventToAssist = async (req, res) => {
         // verifico que el evento no se encuentre ya dentro de los eventos a asistir
         const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventId).exec();
 
-        console.log("result", result)
-
         if (result !== null) {
 
             const user = await User.findByIdAndUpdate(id, {
