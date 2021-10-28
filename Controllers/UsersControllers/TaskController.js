@@ -9,7 +9,10 @@ const getTasks = async (req, res) => {
 
         const { id } = req.params;
 
-        const result = await User.findById(id).exec();
+        const result = await User.findById(id).populate('tareas.eventId', {
+            nombreDelEvento: 1,
+            _id: 1
+        }).exec();
 
         const userTasks = result.tareas;
 

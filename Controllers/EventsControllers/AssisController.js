@@ -6,12 +6,13 @@ const addAssistant = async function (uid, eid){
         const addUser = await Event.findByIdAndUpdate(eid, {
             $push: {
                 asistentes: [{
-                    usuario: uid
+                    usuario: uid,
+                    statusPago: "Incompleto"
                 }]
             }
         }).exec();
 
-        return
+        return;
 
     }catch (err) {
         res.json({
@@ -48,13 +49,13 @@ const deleteAssistant = async function (uid, eid){
             },
             {
                 $pull: {
-                    'asistentes':{
+                    'asistentes': {
                         usuario: ObjectId(uid)
                     }
                 }
             });
         
-        return
+        return;
     }
     catch (err) {
         console.log(err);
