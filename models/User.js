@@ -75,10 +75,15 @@ const userSchema = new Schema({
       ref: 'Event'
     },
     statusPago: {
-      type: String,
-      enum: {
-        values: ['Completo', 'Incompleto', 'Pendiente']
-      }
+      id: {
+        type: String
+      },
+      status: {
+        type: String
+      },
+      monto: {
+        type: Number
+      },
     }
   }],
   notificaciones: {

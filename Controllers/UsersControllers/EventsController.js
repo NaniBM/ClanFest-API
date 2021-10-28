@@ -1,7 +1,7 @@
 const User = require('../../models/User');
 const { ObjectId } = require('mongodb');
 
-const { addAssistant, deleteAssistant } = require('../EventsControllers/AssisController')
+const { addAssistant, deleteAssistant } = require('../EventsControllers/AssisController');
 
 
 const getEvents = async (req, res) => {
@@ -88,7 +88,11 @@ const addEventToAssist = async (req, res) => {
                 $push: {
                     eventosaAsistir: [{
                         eventId: eventId,
-                        statusPago: 'Incompleto'
+                        statusPago: {
+                            id: "",
+                            status: 'Incompleto',
+                            monto: ""
+                        }
                     }]
                 }
             }
@@ -126,7 +130,7 @@ const deleteEventToAssist = async (req, res) => {
                 // funcion para poder borrar elementos a una propiedad array de un Model
                 $pull: {
                     eventosaAsistir: {
-                        eventId: ObjectId(eventId)                    
+                        eventId: ObjectId(eventId)
                     }
                 }
             }
