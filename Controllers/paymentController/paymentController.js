@@ -13,7 +13,7 @@ const getMercadoPagoLink = async (req, res) => {
 
         // agregar credenciales
         mercadopago.configure({
-            access_token: "APP_USR-8280527144669781-102602-1cff7e44b81391959d3d50ecffe2c8da-1007012336"
+            access_token: "TEST-5298667857996708-102621-3fa54a132706b9044d96e0ef6dfc2a9e-1007503894"
         });
 
         var preference = {
@@ -21,7 +21,7 @@ const getMercadoPagoLink = async (req, res) => {
                 {
                     title: title,
                     quantity: quantity,
-                    currency_id: 'MXN',
+                    currency_id: 'ARS',
                     unit_price: price
                 }
             ],
