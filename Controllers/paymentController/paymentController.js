@@ -100,14 +100,15 @@ const addPayment = async (req, res) => {
         // verifico que el evento no se encuentre ya dentro de los eventos a asistir
         const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventid).exec();
 
-        if (!result) {
+        if (!result) { 
+
             // agrego al user como asistente al evento
             await addEvent(id, eventid);
 
             const user = await User.findOneAndUpdate(
                 {
                     _id: id,
-                    'eventosaAsistir.eventId': ObjectId(eventid)
+                    'eventosaAsistir.eventId': eventid
                 },
                 {
                     $set: {
@@ -119,7 +120,6 @@ const addPayment = async (req, res) => {
                     }
                 },
                 {
-                    multi: true,
                     overwrite: true,
                     new: true
                 }
@@ -134,7 +134,6 @@ const addPayment = async (req, res) => {
             })
         }
     } catch (err) {
-
         res.json({
             message: "Error al cargar nuevo pago",
             err
