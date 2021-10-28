@@ -1,4 +1,6 @@
 const User = require('../../models/User');
+const { ObjectId } = require('mongodb');
+
 const { addAssistant, deleteAssistant } = require('../EventsControllers/AssisController')
 
 
@@ -10,7 +12,7 @@ const getEvents = async (req, res) => {
 
         const result = await User.findById(id).populate('eventosCreados', {
             nombreDelEvento: 1,
-            imagen:1,
+            imagen: 1,
             fecha: 1,
             precio: 1,
             _id: 1
@@ -43,9 +45,10 @@ const getEventsToAssist = async (req, res) => {
 
         const { id } = req.params;
 
-        const result = await User.findById(id).populate('eventosaAsistir', {
+        const result = await User.findById(id).populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1,
-            _id: 1
+            _id: 1,
+            statusPago: 1
         }).exec();
 
         const eventsToAssist = result.eventosaAsistir;
@@ -75,15 +78,18 @@ const addEventToAssist = async (req, res) => {
 
         const { id, eventId } = req.params;
 
-        // verifico que el evento no se encuentre ya dentro de los favoritos
-        const result = await User.findById(id).where('eventosaAsistir').equals(eventId).exec();
+        // verifico que el evento no se encuentre ya dentro de los eventos a asistir
+        const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventId).exec();
 
         if (result === null) {
 
             const user = await User.findByIdAndUpdate(id, {
                 // funcion para poder pushear agregar elementos a una propiedad array de un Model
                 $push: {
-                    eventosaAsistir: eventId
+                    eventosaAsistir: [{
+                        eventId: eventId,
+                        statusPago: 'Incompleto'
+                    }]
                 }
             }
             ).exec();
@@ -111,22 +117,38 @@ const deleteEventToAssist = async (req, res) => {
     try {
         const { id, eventId } = req.params;
 
-        const user = await User.findByIdAndUpdate(id, {
-            $pull: {
-                eventosaAsistir: eventId
+        // verifico que el evento no se encuentre ya dentro de los eventos a asistir
+        const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventId).exec();
+
+        if (result !== null) {
+
+            const user = await User.findByIdAndUpdate(id, {
+                // funcion para poder borrar elementos a una propiedad array de un Model
+                $pull: {
+                    eventosaAsistir: {
+                        eventId: ObjectId(eventId)                    
+                    }
+                }
             }
-        });
+            ).exec();
 
-        await deleteAssistant(id, eventId);
+            await deleteAssistant(id, eventId);
 
-        return res.json({
-            message: `El ${user.usuario} dejo de asistir a un evento`
-        })
+            return res.json({
+                message: `${user.usuario} elimino un evento a asistir`
+            });
+        } else {
+
+            return res.json({
+                message: 'El user no asistia a este evento'
+            });
+        }
+
     } catch (err) {
         return res.json({
             message: "Error al eliminar un evento a asistir"
         })
     }
-}
+};
 
 module.exports = { getEventsToAssist, getEvents, addEventToAssist, deleteEventToAssist };
