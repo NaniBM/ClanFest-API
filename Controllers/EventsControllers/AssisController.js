@@ -12,7 +12,7 @@ const addAssistant = async function (uid, eid){
             }
         }).exec();
 
-        return
+        return;
 
     }catch (err) {
         res.json({
@@ -54,7 +54,7 @@ const deleteAssistant = async function (uid, eid){
                 }
             });
         
-        return
+        return;
     }
     catch (err) {
         console.log(err);
