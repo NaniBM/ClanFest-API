@@ -2,7 +2,7 @@ const mercadopago = require('mercadopago');
 
 const getMercadoPagoLink = async (req, res) => {
 
-    const {title, price, quantity} = req.body;
+    const {title, price, quantity, eventID} = req.body;
 
     try {
 
@@ -16,10 +16,15 @@ const getMercadoPagoLink = async (req, res) => {
                 {
                     title: title,
                     quantity: quantity,
-                    currency_id: 'ARS',
+                    currency_id: 'MXN',
                     unit_price: price
                 }
-            ]
+            ],
+            "back_urls": {
+                success: `http://localhost:3000/detail/${eventID}`,
+                pending: `http://localhost:3000/detail/${eventID}`,
+                failure: `http://localhost:3000/detail/${eventID}`
+            }
         };
 
         mercadopago.preferences.create(preference, (err, response) => {
@@ -29,7 +34,14 @@ const getMercadoPagoLink = async (req, res) => {
                     err
                 })
             }
-            res.json({ LinkMP: response.body.init_point })
+
+            console.log("RESPONSE", response.body);
+
+            res.json({ 
+                LinkMP: response.body.init_point,
+                id: response.body.id,
+                fecha_de_pago: response.body.date_created
+            })
         })
 
     } catch (err) {

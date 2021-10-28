@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   usuario: {
     type: String,
-    required: true,    
+    required: true,
     validate: {
       validator: (usuario) => {
         if (usuario.length >= 3 && usuario.length < 50) {
@@ -19,29 +19,29 @@ const userSchema = new Schema({
     type: String,
     unique: true,
     required: true,
-    validate:{
-      validator:(email)=>{
-        const ck_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/  
-        if(email.match(ck_email)){
+    validate: {
+      validator: (email) => {
+        const ck_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (email.match(ck_email)) {
           return true
-        }else{
+        } else {
           return false
         }
       },
-      message:"Solo se permite direcciones de correos",
+      message: "Solo se permite direcciones de correos",
     },
   },
   password: {
-    type: String, 
+    type: String,
     required: true,
-    validate:{
-      validator:(password)=>{
-        const ck_password =/^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,30}$/ 
-        if(password.match(ck_password)){
+    validate: {
+      validator: (password) => {
+        const ck_password = /^(?=.[0-9])[a-zA-Z0-9!@#$%^&]{6,30}$/
+        if (password.match(ck_password)) {
           return true
         }
       },
-      message:'Solo se admite como minimo 6 y maximo 16 caracteres y un caracter especial'
+      message: 'Solo se admite como minimo 6 y maximo 16 caracteres y un caracter especial'
     },
   },
   avatar: {
@@ -69,10 +69,18 @@ const userSchema = new Schema({
     type: [Schema.Types.OjectId],
     ref: 'Event' //array de event._id
   },
-  eventosaAsistir: {
-    type: [Schema.Types.OjectId],
-    ref: 'Event' //array de event._id
-  },
+  eventosaAsistir: [{
+    eventId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Event'
+    },
+    statusPago: {
+      type: String,
+      enum: {
+        values: ['Completo', 'Incompleto', 'Pendiente']
+      }
+    }
+  }],
   notificaciones: {
     type: [String]
   }
