@@ -11,6 +11,7 @@ const getNotification = async () => {
   }
 };
 
+
 const addNotification = async (data) => {
   try {
     await User.findByIdAndUpdate(data.uid, {
