@@ -8,5 +8,6 @@ const router = Router();
 router.use('/api/users', usersRoutes);
 router.use('/events', eventsRoutes);
 router.use('/api/auth', require('./auth'));
+router.use('/notifications/:id', require('./notifications'));
 
 module.exports = router;

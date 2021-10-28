@@ -6,21 +6,12 @@ const cors = require("cors");
 const http = require("http");
 const socketIo = require("socket.io");
 const router = require("./Routes/index");
-const {
-  addNotification,
-  getNotification,
-  cleanNotifications
-} = require("./Controllers/Notifications");
+
+const { getNotification, addNotification, cleanNotifications } = require("./Controllers/Notifications")
+const {addNewUser, getUser, deleteUsers } = require("./SocketIo/SocketIoConfig")
 
 const app = express();
 const server = http.createServer(app);
-
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
 
 mongoose.Promise = global.Promise;
 mongoose
@@ -30,51 +21,6 @@ mongoose
   .then((db) => console.log("BD conectada"))
   .catch((error) => console.error(error));
 
-//Socket.io ------------------------------------
-//Socket.io conexion
-let users = [];
-const addNewUser = (uid, username, socketID) => {
-  if(!users.some((user) => user.uid === uid)){   
-    users.push({ uid, username, socketID });
-  } 
-};
-const deleteUsers = (socketID) => {
-  users = users.filter((user) => user.socketID !== socketID);
-};
-const getUser = (uid) => {
-  return users.find((user) => user.uid === uid);
-};
-
-io.on("connection", (socket) => {
-  socket.on("newUser", (data) => {
-    addNewUser(data.uid, data.usuario, socket.id, io);
-    getNotification(data.uid, socket.id, io)    
-  });
-
-  socket.on("postNotification", (data) => {
-    const receiver = getUser(data.uid);
-    console.log(receiver, data.message);
-    if (!receiver) {
-      addNotification(data.uid, data.message);
-    } else {
-      io.to(receiver.socketID).emit("getNotification", {
-        message: data.message,        
-      });
-    }
-  });
-
-  socket.on("cleanNotifications", (uid)=>{
-   cleanNotifications(uid)
-  })
-
-  socket.on("disconnect", () => {
-    deleteUsers(socket.id);
-    console.log("Client disconnected");
-  });
-});
-
-//----------------------------------------------
-//habilitar body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -91,7 +37,40 @@ app.use((req, res, next) => {
   next();
 });
 
-//habilitar cors
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+//events
+io.on("connection", (socket) => {
+  socket.on("newUser", (data) => {
+    console.log("new User connected")
+    addNewUser(data.uid, data.usuario, socket.id, io);
+  });
+
+  socket.on("postNotification", (data) => {
+    const receiver = getUser(data.uid);
+    if (!receiver) {
+      addNotification(data);
+    } else {
+     console.log(data)
+      io.to(receiver.socketID).emit("getNotification", data);
+    }
+  });
+
+  socket.on("cleanNotifications", (uid) => {
+    cleanNotifications(uid);
+  });
+
+  socket.on("disconnect", () => {
+    deleteUsers(socket.id);
+    console.log("desconectado")
+  });
+});
+
 app.use(cors({ origin: "*" }));
 
 app.use(router);
