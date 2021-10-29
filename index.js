@@ -53,12 +53,13 @@ io.on("connection", (socket) => {
 
   socket.on("postNotification", (data) => {
     const receiver = getUser(data.uid);
-    if (!receiver) {
+    if (!receiver) {      
       addNotification(data);
     } else {
-     console.log(data)
-      io.to(receiver.socketID).emit("getNotification", data);
-    }
+     io.to(receiver.socketID).emit("getNotifications", 
+      data.uid, data.type, data.idEvento, data.message)
+      }
+      
   });
 
   socket.on("cleanNotifications", (uid) => {

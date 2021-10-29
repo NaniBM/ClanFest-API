@@ -1,14 +1,12 @@
 const User = require("../models/User");
 
-const getNotification = async () => {
+const getNotification = async function(req, res){
   try {
-    
     const { notificaciones } = await User.findById(req.params.id, "notificaciones");
-    console.log(notificaciones)
     return res.json(notificaciones)
   } catch (err) {
     console.error(err);
-  }
+  }  
 };
 
 

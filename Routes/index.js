@@ -9,7 +9,7 @@ const paymentRoutes = require('./payment');
 router.use('/api/users', usersRoutes);
 router.use('/events', eventsRoutes);
 router.use('/api/auth', require('./auth'));
-router.use('/notifications/:id', require('./notifications'));
+router.use('/notifications', require('./notifications'));
 router.use('/api/payment', paymentRoutes);
 
 
