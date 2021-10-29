@@ -14,6 +14,11 @@ const getTasks = async (req, res) => {
             _id: 1
         }).exec();
 
+        const resultado = await User.findById(id).populate('eventosaAsistir.eventId', {
+            nombreDelEvento: 1
+        }).exec();
+
+        const eventsToAssist = resultado.eventosaAsistir
         const userTasks = result.tareas;
 
         if (userTasks.length === 0) {
@@ -23,7 +28,8 @@ const getTasks = async (req, res) => {
         } else {
             return res.json({
                 message: "Tareas del user encontradas",
-                userTasks
+                userTasks,
+                eventsToAssist
             });
         }
 
@@ -53,7 +59,7 @@ const addTask = async (req, res) => {
             if (!event) {
 
                 await addTaskEvent(id, eventId, tarea);
-            
+
                 const user = await User.findByIdAndUpdate(id, {
                     // funcion para poder pushear agregar elementos a una propiedad array de un Model
                     $push: {

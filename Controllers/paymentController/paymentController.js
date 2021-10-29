@@ -13,7 +13,7 @@ const getMercadoPagoLink = async (req, res) => {
 
         // agregar credenciales
         mercadopago.configure({
-            access_token: "APP_USR-8280527144669781-102602-1cff7e44b81391959d3d50ecffe2c8da-1007012336"
+            access_token: "TEST-5298667857996708-102621-3fa54a132706b9044d96e0ef6dfc2a9e-1007503894"
         });
 
         var preference = {
@@ -21,7 +21,7 @@ const getMercadoPagoLink = async (req, res) => {
                 {
                     title: title,
                     quantity: quantity,
-                    currency_id: 'MXN',
+                    currency_id: 'ARS',
                     unit_price: price
                 }
             ],
@@ -100,14 +100,15 @@ const addPayment = async (req, res) => {
         // verifico que el evento no se encuentre ya dentro de los eventos a asistir
         const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventid).exec();
 
-        if (!result) {
+        if (!result) { 
+
             // agrego al user como asistente al evento
             await addEvent(id, eventid);
 
             const user = await User.findOneAndUpdate(
                 {
                     _id: id,
-                    'eventosaAsistir.eventId': ObjectId(eventid)
+                    'eventosaAsistir.eventId': eventid
                 },
                 {
                     $set: {
@@ -119,7 +120,6 @@ const addPayment = async (req, res) => {
                     }
                 },
                 {
-                    multi: true,
                     overwrite: true,
                     new: true
                 }
@@ -134,7 +134,6 @@ const addPayment = async (req, res) => {
             })
         }
     } catch (err) {
-
         res.json({
             message: "Error al cargar nuevo pago",
             err
