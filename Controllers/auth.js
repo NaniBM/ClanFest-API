@@ -48,12 +48,9 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
 
     const {email, password} = req.body;
-    console.log("password:" , password)
     try {        
         const user = await User.findOne({ email });
-        console.log("email:", email)
-        console.log("User:", user)
-        if(!user) {
+           if(!user) {
             return res.status(400).json({
                 ok: false,
                 msg: 'El usuario no existe con ese email'
