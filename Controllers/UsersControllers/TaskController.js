@@ -98,6 +98,8 @@ const addTask = async (req, res) => {
                         new: true
                     }).exec();
 
+                    await addTaskEvent(id, eventId, tarea);
+
                 const initialTasksList = event.tareasDelUsuario.length;
                 const updatedTasksList = user.tareas[indexEvent].tareasDelUsuario.length;
 

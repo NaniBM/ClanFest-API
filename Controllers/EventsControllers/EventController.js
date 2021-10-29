@@ -10,7 +10,7 @@ const addEvents = async function(req, res){
             });
         }
         const event = new Event(req.body);
-        const result = await event.save((err)=> err? handleError(err): null);
+        const result = await event.save();
         const creador = await User.findByIdAndUpdate(autor,
             {'$push': {'eventosCreados': event._id}});
 
