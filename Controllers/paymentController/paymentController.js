@@ -1,6 +1,4 @@
 const User = require('../../models/User');
-const { ObjectId } = require('mongodb');
-
 const mercadopago = require('mercadopago');
 
 const { addAssistant } = require('../EventsControllers/AssisController');
@@ -16,6 +14,7 @@ const getMercadoPagoLink = async (req, res) => {
             access_token: "TEST-5298667857996708-102621-3fa54a132706b9044d96e0ef6dfc2a9e-1007503894"
         });
 
+        // datos del producto a pagar
         var preference = {
             items: [
                 {
@@ -59,14 +58,13 @@ const getMercadoPagoLink = async (req, res) => {
 const addEvent = async (id, eventId) => {
 
     try {
-        /* 
-                // verifico que el evento no se encuentre ya dentro de los eventos a asistir
-                const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventId).exec(); */
 
+        // agrego el user asistente al model Event
         await addAssistant(id, eventId);
 
         await User.findByIdAndUpdate(id, {
-            // funcion para poder pushear agregar elementos a una propiedad array de un Model
+
+            // funcion para poder agregar elementos a una propiedad array de un Model
             $push: {
                 eventosaAsistir: [{
                     eventId: eventId,
@@ -100,7 +98,7 @@ const addPayment = async (req, res) => {
         // verifico que el evento no se encuentre ya dentro de los eventos a asistir
         const result = await User.findById(id).where('eventosaAsistir.eventId').equals(eventid).exec();
 
-        if (!result) { 
+        if (!result) {
 
             // agrego al user como asistente al evento
             await addEvent(id, eventid);
@@ -120,8 +118,8 @@ const addPayment = async (req, res) => {
                     }
                 },
                 {
-                    overwrite: true,
-                    new: true
+                    overwrite: true, // sobreescribo
+                    new: true // retorno el model ACTUALIZADO
                 }
             ).exec();
 
@@ -141,4 +139,63 @@ const addPayment = async (req, res) => {
     }
 };
 
-module.exports = { getMercadoPagoLink, addPayment };
+const getPayment = async (req, res) => {
+
+    const { id, eventid } = req.params;
+
+    try {
+
+        const result = await User.findById(id).exec();
+
+        // busco dentro del array de eventos a asistir el que conincida con el id del evento
+        const event = result.eventosaAsistir.find(e => e.eventId == eventid);
+
+        const status = event.statusPago;
+
+        return res.json(status)
+
+    } catch (err) {
+        res.json({
+            message: "Error al buscar pago",
+            err
+        })
+    }
+
+};
+
+const updatePayment = async (req, res) => {
+
+    const { id, paymentid } = req.params;
+    const { status } = req.body;
+
+    try {
+
+        const user = await User.findOneAndUpdate(
+            {
+                _id: id,
+                'eventosaAsistir.statusPago.id': paymentid
+            },
+            {
+                $set: {
+                    'eventosaAsistir.$.statusPago.status': status
+                }
+            },
+            {
+                overwrite: true, // sobreescribo
+                new: true // retorno el model ACTUALIZADO
+            }
+        ).exec();
+
+        return res.json({
+            message: `Se actualizo el status del pago`
+        });
+
+    } catch (err) {
+        res.json({
+            message: "Error al actualizar status de pago",
+            err
+        })
+    }
+};
+
+module.exports = { getMercadoPagoLink, addPayment, getPayment, updatePayment };

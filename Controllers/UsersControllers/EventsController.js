@@ -10,6 +10,7 @@ const getEvents = async (req, res) => {
 
         const { id } = req.params;
 
+        // traigo desde el model Event la filas
         const result = await User.findById(id).populate('eventosCreados', {
             nombreDelEvento: 1,
             imagen: 1,
@@ -45,6 +46,7 @@ const getEventsToAssist = async (req, res) => {
 
         const { id } = req.params;
 
+        // traigo del modelo Event a partir de los ids que se encuentran en eventosaAsistir.eventId las filas
         const result = await User.findById(id).populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1,
             _id: 1,
@@ -98,6 +100,7 @@ const addEventToAssist = async (req, res) => {
             }
             ).exec();
 
+            // agrego al usuario asistente al model Event
             await addAssistant(id, eventId);
 
             return res.json({
@@ -136,6 +139,7 @@ const deleteEventToAssist = async (req, res) => {
             }
             ).exec();
 
+            // quito el asistente del model Event
             await deleteAssistant(id, eventId);
 
             return res.json({

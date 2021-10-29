@@ -3,6 +3,7 @@ const User = require("../models/User");
 const getNotification = async (uid, socketID, io) => {
   try {
     const { notificaciones } = await User.findById(uid, "notificaciones");
+
     if (notificaciones.length) {      
       console.log(socketID);
       io.to(socketID).emit("getNotifOfLine", notificaciones);
