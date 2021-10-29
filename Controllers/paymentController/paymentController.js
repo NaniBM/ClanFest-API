@@ -1,5 +1,6 @@
 const User = require('../../models/User');
 const mercadopago = require('mercadopago');
+const axios = require('axios');
 
 const { addAssistant } = require('../EventsControllers/AssisController');
 
@@ -163,14 +164,74 @@ const getPayment = async (req, res) => {
 
 };
 
-const updatePayment = async (req, res) => {
+const getPaymentStatus = async (req, res) => {
 
-    const { id, paymentid } = req.params;
-    const { status } = req.body;
+    const { id } = req.params;
+    const token = "TEST-5298667857996708-102621-3fa54a132706b9044d96e0ef6dfc2a9e-1007503894";
 
     try {
 
-        const user = await User.findOneAndUpdate(
+        const user = await User.findById(id);
+
+        const eventsToAssist = user.eventosaAsistir;
+
+        const statusPagos = eventsToAssist.filter(e => e.statusPago.status === "in_process");
+
+        const paymentsId = statusPagos.map(e => {
+            return e.statusPago.id
+        });
+
+        const results = await Promise.all(
+            paymentsId.map(async (e) => {
+                return await axios.get(`https://api.mercadopago.com/v1/payments/${e}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                )
+            }));
+
+        let statusPaymentsMP = [];
+
+        results.map(async (e) => {
+
+            const id = e.data.id;
+            const status = e.data.status;
+
+            statusPaymentsMP.push({
+                id,
+                status
+            });
+
+        });
+
+        const approvedPayments = statusPaymentsMP.filter(e => e.status === "approved");
+
+        if (approvedPayments.length > 0) {
+            approvedPayments.map(async (e) => {
+                await updatePayment(e.id, e.status)
+            })
+
+            return res.json("Se actualizaron pagos");
+
+        } else {
+            res.json("No se actualizaron pagos");
+        }
+
+    } catch (err) {
+        res.json({
+            message: "Error al buscar pago",
+            err
+        })
+    }
+};
+
+const updatePayment = async (paymentid, status) => {
+
+    const { id } = req.params;
+
+    try {
+
+        await User.findOneAndUpdate(
             {
                 _id: id,
                 'eventosaAsistir.statusPago.id': paymentid
@@ -186,9 +247,7 @@ const updatePayment = async (req, res) => {
             }
         ).exec();
 
-        return res.json({
-            message: `Se actualizo el status del pago`
-        });
+        return;
 
     } catch (err) {
         res.json({
@@ -198,4 +257,4 @@ const updatePayment = async (req, res) => {
     }
 };
 
-module.exports = { getMercadoPagoLink, addPayment, getPayment, updatePayment };
+module.exports = { getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus };

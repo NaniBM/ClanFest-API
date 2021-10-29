@@ -17,7 +17,8 @@ const getTasks = async (req, res) => {
 
         // traigo desde el model Event del id almacenado en tareas.eventosaAsistir las filas definidas
         const resultado = await User.findById(id).populate('eventosaAsistir.eventId', {
-            nombreDelEvento: 1
+            nombreDelEvento: 1,
+            fecha: 1
         }).exec();
 
         const eventsToAssist = resultado.eventosaAsistir
