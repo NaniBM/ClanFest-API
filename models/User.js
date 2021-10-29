@@ -86,9 +86,20 @@ const userSchema = new Schema({
       },
     }
   }],
-  notificaciones: {
-    type: [String]
-  }
+  notificaciones: [{
+    uid: {
+      type: String
+    },
+    type:{
+      type: String
+    },
+    idEvento: {
+      type: String
+    },
+     message: {
+       type: String
+     }
+  }]
 });
 
 module.exports = model("User", userSchema);
