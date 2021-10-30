@@ -78,7 +78,16 @@ const editUser = async (req, res) => {
     try {
 
         const { id } = req.params;
-        const { name, password } = req.body;
+        const { name, password,avatar } = req.body;
+        if (avatar){
+            const salt = bcrypt.genSaltSync(); 
+            const hashPass = bcrypt.hashSync(password, salt);
+            const user = await User.findByIdAndUpdate(id,
+                {
+                    avatar:avatar
+                }
+            ).exec();
+        }
 
         if (name && !password) { // actualizo solo el nombre
 
