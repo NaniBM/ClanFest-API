@@ -4,6 +4,23 @@ const axios = require('axios');
 
 const { addAssistant } = require('../EventsControllers/AssisController');
 
+const getPayments = async (req,res) => {
+
+    try {
+
+        const result = await User.find().select('eventosaAsistir usuario').populate('eventosaAsistir.eventId', {
+            nombreDelEvento: 1
+        }).exec();
+
+        return res.json(result);
+
+    } catch (err) {
+        res.json({
+            message:"Error al buscar pagos"
+        });
+    }
+};
+
 const getMercadoPagoLink = async (req, res) => {
 
     const { title, price, quantity, eventID } = req.body;
@@ -257,4 +274,4 @@ const updatePayment = async (paymentid, status) => {
     }
 };
 
-module.exports = { getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus };
+module.exports = { getPayments, getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus };
