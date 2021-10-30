@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const {getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus} = require('../Controllers/paymentController/paymentController');
+const {getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus, getPayments} = require('../Controllers/paymentController/paymentController');
+
+// traer todos los pagos
+router.get('/getpayments', getPayments);
 
 // crear nuevo link de pago
 router.post('/new', getMercadoPagoLink);
