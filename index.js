@@ -48,19 +48,25 @@ const io = socketIo(server, {
 io.on("connection", (socket) => {
   socket.on("newUser", (data) => {
     console.log("new User connected")
-    addNewUser(data.uid, data.usuario, socket.id, io);
+    addNewUser(data.uid, data.usuario, socket.id);
   });
 
+  
   socket.on("postNotification", (data) => {
     const receiver = getUser(data.uid);
-    if (!receiver) {      
+    if (!receiver) {   
+      console.log("off line", data)   
       addNotification(data);
     } else {
+      console.log("on line", data)   
+
+      io.to(receiver.socketID).emit("hola", "Holaaaaaa")
+
      io.to(receiver.socketID).emit("getNotifications", 
       data.uid, data.type, data.idEvento, data.message)
-      }
-      
+      }      
   });
+
 
   socket.on("cleanNotifications", (uid) => {
     cleanNotifications(uid);
@@ -80,5 +86,3 @@ const port = process.env.PORT || 3008;
 server.listen(port, function () {
   console.log("servidor escuchando en puerto:", port);
 });
-
-module.exports = io;
