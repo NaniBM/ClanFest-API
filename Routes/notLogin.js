@@ -7,6 +7,6 @@ const router = express.Router();
 const { getEventsFav} = require('../Controllers/UsersControllers/NotLoginController')
 
 //para mostrar eventos marcados como favoritos
-router.get('/getfavourites', getEventsFav);
+router.post('/getfavourites', getEventsFav);
 
 module.exports = router;
