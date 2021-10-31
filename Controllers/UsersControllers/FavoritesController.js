@@ -6,6 +6,7 @@ const getFavouritesEvents = async (req, res) => {
 
         const { id } = req.params;
 
+        // traigo datos del evento del modelo Event que se encuentra en favoritos
         const result = await User.findById(id).populate('eventsFavoritos', {
             nombreDelEvento: 1,
             _id: 1
@@ -72,6 +73,7 @@ const removeFavourite = async (req, res) => {
 
         const { id, eventId } = req.params;
 
+        // verifico si el evento se encuentra dentro de favoritos
         const result = await User.findById(id).where('eventsFavoritos').equals(eventId).exec();
 
         if (result === null) {

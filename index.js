@@ -54,17 +54,15 @@ io.on("connection", (socket) => {
   
   socket.on("postNotification", (data) => {
     const receiver = getUser(data.uid);
-    if (!receiver) {   
-      console.log("off line", data)   
+    if (!receiver) {
+      console.log('OFFLINE')
       addNotification(data);
     } else {
-      console.log("on line", data)   
-
-      io.to(receiver.socketID).emit("hola", "Holaaaaaa")
-
-     io.to(receiver.socketID).emit("getNotifications", 
+      console.log('ONLINE')
+      io.to(receiver.socketID).emit("getNotifications", 
       data.uid, data.type, data.idEvento, data.message)
-      }      
+    }
+      
   });
 
 
@@ -73,8 +71,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.log('DISCONECTED')
     deleteUsers(socket.id);
-    console.log("desconectado")
   });
 });
 

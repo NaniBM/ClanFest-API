@@ -49,4 +49,5 @@ router.patch('/addfavourite/:id/:eventId', addFavourite);
 // borrar evento de favorito
 router.patch('/removefavourite/:id/:eventId', removeFavourite);
 
+
 module.exports = router;

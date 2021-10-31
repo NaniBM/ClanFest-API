@@ -23,7 +23,6 @@ const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // crea variable con la consulta para evitar error por consola "querry was already executed"
         const user = await User.findById(id).exec();
 
         if (!user) {
@@ -79,9 +78,19 @@ const editUser = async (req, res) => {
     try {
 
         const { id } = req.params;
-        const { name, password } = req.body;
+        const { name, password,avatar } = req.body;
+        if (avatar){
+            const salt = bcrypt.genSaltSync(); 
+            const hashPass = bcrypt.hashSync(password, salt);
+            const user = await User.findByIdAndUpdate(id,
+                {
+                    avatar:avatar
+                }
+            ).exec();
+        }
 
-        if (name && !password) {
+        if (name && !password) { // actualizo solo el nombre
+
             const user = await User.findByIdAndUpdate(id,
                 {
                     usuario: name
@@ -93,9 +102,9 @@ const editUser = async (req, res) => {
             });
         };
 
-        if (password && !name) {
+        if (password && !name) { // actualizo solo la contraseña hashteandola
 
-            const salt = bcrypt.genSaltSync();
+            const salt = bcrypt.genSaltSync(); 
             const hashPass = bcrypt.hashSync(password, salt);
 
             const user = await User.findByIdAndUpdate(id,
@@ -109,7 +118,7 @@ const editUser = async (req, res) => {
             });
         };
 
-        if (name && password) {
+        if (name && password) { // actualizo ambos valores
 
             const salt = bcrypt.genSaltSync();
             const hashPass = bcrypt.hashSync(password, salt);
