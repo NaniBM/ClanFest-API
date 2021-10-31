@@ -2,6 +2,7 @@ const User = require('../../models/User');
 const mercadopago = require('mercadopago');
 const axios = require('axios');
 
+const { generateQr } = require('../paymentController/qrcodeController');
 const { addAssistant } = require('../EventsControllers/AssisController');
 
 const getPayments = async (req,res) => {
@@ -140,6 +141,9 @@ const addPayment = async (req, res) => {
                     new: true // retorno el model ACTUALIZADO
                 }
             ).exec();
+
+            // genero QR
+            await generateQr(user.usuario, user._id, eventid);
 
             return res.json({
                 message: `El user ${user.usuario} realizo un pago`
