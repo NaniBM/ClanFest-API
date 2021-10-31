@@ -47,9 +47,11 @@ const io = socketIo(server, {
 //events
 io.on("connection", (socket) => {
   socket.on("newUser", (data) => {
-    addNewUser(data.uid, data.usuario, socket.id, io);
+    console.log("new User connected")
+    addNewUser(data.uid, data.usuario, socket.id);
   });
 
+  
   socket.on("postNotification", (data) => {
     const receiver = getUser(data.uid);
     if (!receiver) {
@@ -62,6 +64,7 @@ io.on("connection", (socket) => {
     }
       
   });
+
 
   socket.on("cleanNotifications", (uid) => {
     cleanNotifications(uid);
@@ -81,5 +84,3 @@ const port = process.env.PORT || 3008;
 server.listen(port, function () {
   console.log("servidor escuchando en puerto:", port);
 });
-
-module.exports = io;

@@ -1,6 +1,7 @@
 
 //configuracion para nuevo usuario online
 let users = [];
+
 const addNewUser = (uid, username, socketID) => {
   if (!users.some((user) => user.uid === uid)) {
     users.push({ uid, username, socketID });
