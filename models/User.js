@@ -84,6 +84,9 @@ const userSchema = new Schema({
       monto: {
         type: Number
       },
+      qr: {
+        type: String
+      }
     }
   }],
   notificaciones: [{
