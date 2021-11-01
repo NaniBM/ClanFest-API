@@ -17,11 +17,18 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "mercadopago": "^1.5.8",
     "mongoose": "^6.0.11",
+    "nodemailer": "^6.7.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.13",
+<<<<<<< HEAD
+    "npm": "^8.1.2",
+=======
     "qrcode": "^1.4.4",
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
     "shortid": "^2.2.16",
     "socket.io": "^4.3.1"
   }
