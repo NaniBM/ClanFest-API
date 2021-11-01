@@ -9,7 +9,7 @@ const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find().select('eventosaAsistir usuario').populate('eventosaAsistir.eventId', {
+        const result = await User.find().select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1
         }).exec();
 
