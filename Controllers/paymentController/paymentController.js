@@ -2,6 +2,9 @@ const User = require('../../models/User');
 const mercadopago = require('mercadopago');
 const axios = require('axios');
 
+<<<<<<< HEAD
+const { addAssistant } = require('../EventsControllers/AssisController');
+=======
 const { generateQr } = require('../paymentController/qrcodeController');
 const { addAssistant } = require('../EventsControllers/AssisController');
 
@@ -21,12 +24,14 @@ const getPayments = async (req,res) => {
         });
     }
 };
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
 
 const getMercadoPagoLink = async (req, res) => {
 
     const { title, price, quantity, eventID } = req.body;
 
     try {
+        console.log("entro aca el hijo de puta")
 
         // agregar credenciales
         mercadopago.configure({
@@ -58,7 +63,11 @@ const getMercadoPagoLink = async (req, res) => {
                 })
             }
 
+<<<<<<< HEAD
+            
+=======
             console.log("RESPONSE", response.body);
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
 
             res.json({
                 LinkMP: response.body.init_point,
@@ -142,9 +151,12 @@ const addPayment = async (req, res) => {
                 }
             ).exec();
 
+<<<<<<< HEAD
+=======
             // genero QR
             await generateQr(user.usuario, user._id, eventid);
 
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
             return res.json({
                 message: `El user ${user.usuario} realizo un pago`
             })
@@ -166,11 +178,22 @@ const getPayment = async (req, res) => {
     const { id, eventid } = req.params;
 
     try {
+<<<<<<< HEAD
+        
+
+        const result = await User.findById(id).exec();
+        
+
+        // busco dentro del array de eventos a asistir el que conincida con el id del evento
+        const event = result.eventosaAsistir.find(e => e.eventId == eventid);
+        
+=======
 
         const result = await User.findById(id).exec();
 
         // busco dentro del array de eventos a asistir el que conincida con el id del evento
         const event = result.eventosaAsistir.find(e => e.eventId == eventid);
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
 
         const status = event.statusPago;
 
@@ -224,6 +247,10 @@ const getPaymentStatus = async (req, res) => {
             });
 
         });
+<<<<<<< HEAD
+        
+=======
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
 
         const approvedPayments = statusPaymentsMP.filter(e => e.status === "approved");
 
@@ -278,4 +305,8 @@ const updatePayment = async (paymentid, status) => {
     }
 };
 
+<<<<<<< HEAD
+module.exports = { getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus };
+=======
 module.exports = { getPayments, getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus };
+>>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
