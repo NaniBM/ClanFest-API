@@ -72,6 +72,9 @@ const eventSchema = new Schema({
     tareasDelUsuario: {
       type:[]
     },
+    categorias: {
+      type:[]
+    },
     statusPago: {
       type: String,
       enum: {
