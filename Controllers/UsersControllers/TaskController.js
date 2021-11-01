@@ -9,8 +9,19 @@ const getTasks = async (req, res) => {
 
         const { id } = req.params;
 
-        const result = await User.findById(id).exec();
+        // traigo desde el model Event del id almacenado en tareas.eventId las filas definidas
+        const result = await User.findById(id).populate('tareas.eventId', {
+            nombreDelEvento: 1,
+            _id: 1
+        }).exec();
 
+        // traigo desde el model Event del id almacenado en tareas.eventosaAsistir las filas definidas
+        const resultado = await User.findById(id).populate('eventosaAsistir.eventId', {
+            nombreDelEvento: 1,
+            fecha: 1
+        }).exec();
+
+        const eventsToAssist = resultado.eventosaAsistir
         const userTasks = result.tareas;
 
         if (userTasks.length === 0) {
@@ -20,7 +31,8 @@ const getTasks = async (req, res) => {
         } else {
             return res.json({
                 message: "Tareas del user encontradas",
-                userTasks
+                userTasks,
+                eventsToAssist
             });
         }
 
@@ -40,17 +52,18 @@ const addTask = async (req, res) => {
         const { id, eventId } = req.params;
         const { tarea } = req.body;
 
-        // verifico que la tarea no se encuentre ya dentro del array de tareas
         const userCheck = await User.findById(id).exec();
 
         if (userCheck) {
 
+            // verifico si el evento existe o no
             const event = userCheck.tareas.find(e => e.eventId.toString() === eventId);
 
             if (!event) {
 
+                // agrego la tarea al modelo Event
                 await addTaskEvent(id, eventId, tarea);
-            
+
                 const user = await User.findByIdAndUpdate(id, {
                     // funcion para poder pushear agregar elementos a una propiedad array de un Model
                     $push: {
@@ -84,6 +97,8 @@ const addTask = async (req, res) => {
                     {
                         new: true
                     }).exec();
+
+                    await addTaskEvent(id, eventId, tarea);
 
                 const initialTasksList = event.tareasDelUsuario.length;
                 const updatedTasksList = user.tareas[indexEvent].tareasDelUsuario.length;
@@ -120,12 +135,14 @@ const deleteTask = async (req, res) => {
         const { id, eventId } = req.params;
         const { tarea } = req.body;
 
-        // verifico que la tarea no se encuentre ya dentro del array de tareas
         const userCheck = await User.findById(id).exec();
 
         if (userCheck) {
 
+            // verifico si el evento existe
             const event = userCheck.tareas.find(e => e.eventId.toString() === eventId);
+
+            // traigo el indice del evento al cual le voy a quitar la tarea
             const indexEvent = userCheck.tareas.findIndex(e => e.eventId.toString() === eventId);
 
             const user = await User.findOneAndUpdate(
@@ -142,11 +159,15 @@ const deleteTask = async (req, res) => {
                     new: true
                 }).exec();
 
+            
+            // borro la tarea del model Event
             await deleteTaskEvent(id, eventId, tarea.toUpperCase());
 
+            // guardo la longitud del array de tareas antes y despues de intentar quitar
             const initialTasksList = event.tareasDelUsuario.length;
             const updatedTasksList = user.tareas[indexEvent].tareasDelUsuario.length;
 
+            // controlo si realmente se quito o no una tarea
             if (initialTasksList === updatedTasksList) {
                 return res.json({
                     message: "La tarea a borrar no existe"

@@ -10,7 +10,7 @@ const addEvents = async function(req, res){
             });
         }
         const event = new Event(req.body);
-        const result = await event.save((err)=> err? handleError(err): null);
+        const result = await event.save();
         const creador = await User.findByIdAndUpdate(autor,
             {'$push': {'eventosCreados': event._id}});
 
@@ -28,7 +28,9 @@ const getEvents = async function(req, res){
         const search = req.query.search || 0;
         if(!search){
 
-            const events = await Event.find();
+            const events = await Event.find().populate('autor', {
+                usuario: 1
+            });
 
             if (!events.length) {
                 return res.json({

@@ -6,12 +6,13 @@ const addAssistant = async function (uid, eid){
         const addUser = await Event.findByIdAndUpdate(eid, {
             $push: {
                 asistentes: [{
-                    usuario: uid
+                    usuario: uid,
+                    statusPago: "Incompleto"
                 }]
             }
         }).exec();
 
-        return
+        return;
 
     }catch (err) {
         res.json({
@@ -22,8 +23,9 @@ const addAssistant = async function (uid, eid){
 
 const getAssistans = async function(req, res){
     try{
-        const list = await Event.findById(req.params.id, "asistentes").populate('asistentes.usuario', {
-            usuario:1});
+        const list = await Event.findById(req.params.id, {nombreDelEvento: 1, asistentes:1})
+        .populate('asistentes.usuario', {
+            usuario:1, avatar: 1});
         if (!list) {
             return res.json({
                 message: "Este evento no tiene asistentes"
@@ -47,13 +49,13 @@ const deleteAssistant = async function (uid, eid){
             },
             {
                 $pull: {
-                    'asistentes':{
+                    'asistentes': {
                         usuario: ObjectId(uid)
                     }
                 }
             });
         
-        return
+        return;
     }
     catch (err) {
         console.log(err);
