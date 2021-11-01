@@ -102,7 +102,12 @@ const userSchema = new Schema({
      message: {
        type: String
      }
-  }]
+  }],
+  habilitado: {
+    type: Boolean,
+    require: true,
+    default: true
+  }
 });
 
 module.exports = model("User", userSchema);
