@@ -28,7 +28,9 @@ const getEvents = async function(req, res){
         const search = req.query.search || 0;
         if(!search){
 
-            const events = await Event.find();
+            const events = await Event.find().populate('autor', {
+                usuario: 1
+            });
 
             if (!events.length) {
                 return res.json({
