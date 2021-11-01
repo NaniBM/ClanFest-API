@@ -76,7 +76,6 @@ io.on("connection", (socket) => {
   });
 });
 
-<<<<<<< HEAD
 //----------------------------------------------
 //habilitar body parser
 app.use(bodyParser.json());
@@ -101,9 +100,8 @@ app.get('/cors', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.send({ "msg": "This has CORS enabled 🎈" })
   })
-=======
+
 app.use(cors({ origin: "*" }));
->>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
 
 app.use(router);
 
