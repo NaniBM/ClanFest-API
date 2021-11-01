@@ -92,7 +92,11 @@ app.use((req, res, next) => {
 });
 
 //habilitar cors
-app.use(cors({ origin: "*" }));
+// app.use(cors({ origin: "*" }));
+app.get('/cors', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send({ "msg": "This has CORS enabled 🎈" })
+  })
 
 app.use(router);
 

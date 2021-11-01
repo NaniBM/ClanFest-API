@@ -33,6 +33,7 @@ const createUser = async (req, res) => {
             uid: user._id,
             name: user.usuario,
             image: user.avatar,
+            email: user.email,
             token
         })
         
@@ -48,13 +49,10 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
 
     const {email, password} = req.body;
-    console.log("password:" , password)
     try {        
         const user = await User.findOne({ email });
-        console.log("email:", email)
-        console.log("User:", user)
         if(!user) {
-            return res.status(400).json({
+            return res.json({
                 ok: false,
                 msg: 'El usuario no existe con ese email'
             });
@@ -64,7 +62,7 @@ const loginUser = async (req, res) => {
         const validaPassword = bcrypt.compareSync( password, user.password);
 
         if( !validaPassword ){
-            return res.status(400).json({
+            return res.json({
                 ok: false,
                 msg: 'Password incorrecto'
             })
@@ -79,6 +77,7 @@ const loginUser = async (req, res) => {
             uid: user.id,
             name: user.usuario,
             image: user.avatar,
+            email: user.email,
             token
         })
         
