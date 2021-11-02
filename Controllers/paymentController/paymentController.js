@@ -6,7 +6,7 @@ const { generateQr } = require('../paymentController/qrcodeController');
 const { addAssistant } = require('../EventsControllers/AssisController');
 
 // const URL = "http://localhost:3000/detail/"
-const URL = "https://flamboyant-golick-d7cb40.netlify.app/"
+const URL = "https://flamboyant-golick-d7cb40.netlify.app"
 
 const getPayments = async (req,res) => {
 
