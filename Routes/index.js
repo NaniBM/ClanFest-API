@@ -9,7 +9,6 @@ const emailRoutes = require('./Nodemailer')
 const notLoginRoutes = require('./notLogin');
 const adminRoutes = require('./admin');
 
-
 router.use('/api/users', usersRoutes);
 router.use('/events', eventsRoutes);
 router.use('/api/auth', require('./auth'));
