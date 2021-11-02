@@ -12,8 +12,8 @@ const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
-            nombreDelEvento: 1
+        const result = await User.find().select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
+            nombreDelEvento: 1,
         }).exec();
 
         let filtrado = result.map((u) => {
@@ -21,9 +21,11 @@ const getPayments = async (req,res) => {
             return u
         })
         return res.json(filtrado);
-        
+
     } catch (err) {
-        console.error(err)
+        res.json({
+            message:"Error al buscar pagos"
+        });
     }
 };
 
