@@ -76,6 +76,14 @@ io.on("connection", (socket) => {
   });
 });
 
+
+//habilitar cors
+// app.use(cors({ origin: "*" }));
+app.get('/cors', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send({ "msg": "This has CORS enabled 🎈" })
+  })
+
 app.use(cors({ origin: "*" }));
 
 app.use(router);
