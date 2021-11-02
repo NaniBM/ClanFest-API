@@ -103,7 +103,7 @@ const renewToken = async(req, res) => {
         msg: 'renew',
         uid,
         usuario,
-        token
+        token,
     })
 }
 

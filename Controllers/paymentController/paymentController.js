@@ -12,16 +12,18 @@ const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find().select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
+        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1
         }).exec();
 
-        return res.json(result);
-
+        let filtrado = result.map((u) => {
+            u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "Aprobado")
+            return u
+        })
+        return res.json(filtrado);
+        
     } catch (err) {
-        res.json({
-            message:"Error al buscar pagos"
-        });
+        console.error(err)
     }
 };
 
