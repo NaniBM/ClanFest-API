@@ -2,7 +2,6 @@ const User = require('../../models/User');
 
 const express = require("express");
 const app = express();
-const http = require("http");
 const QRCode = require('qrcode');
 /* const PDFDocument = require('pdfkit'); */
 const { PDFDocument } = require('pdf-lib');
@@ -167,8 +166,8 @@ const genQR = async (res, req) => {
                 await schema.validateAsync(req.body);
         
               await run({
-                width: +width,
-                height: +height,
+/*                 width: +width,
+                height: +height, */
                 x: +x,
                 y: +y,
                 qrDarkColor,
