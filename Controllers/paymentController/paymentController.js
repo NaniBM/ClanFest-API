@@ -9,16 +9,14 @@ const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find().select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
+        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1
         }).exec();
 
         return res.json(result);
 
     } catch (err) {
-        res.json({
-            message:"Error al buscar pagos"
-        });
+        console.error(err)
     }
 };
 
