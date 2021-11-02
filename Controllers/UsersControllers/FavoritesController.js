@@ -9,7 +9,9 @@ const getFavouritesEvents = async (req, res) => {
         // traigo datos del evento del modelo Event que se encuentra en favoritos
         const result = await User.findById(id).populate('eventsFavoritos', {
             nombreDelEvento: 1,
-            _id: 1
+            _id: 1,
+            imagen: 1,
+            fecha: 1
         }).exec();
 
         const favouritesEvents = result.eventsFavoritos;
