@@ -24,11 +24,8 @@
     "nodemailer": "^6.7.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.13",
-<<<<<<< HEAD
     "npm": "^8.1.2",
-=======
     "qrcode": "^1.4.4",
->>>>>>> 81452658a61ff454117c77438cdfd8e2a6c3aae3
     "shortid": "^2.2.16",
     "socket.io": "^4.3.1"
   }
