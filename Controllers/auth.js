@@ -78,6 +78,7 @@ const loginUser = async (req, res) => {
             name: user.usuario,
             image: user.avatar,
             email: user.email,
+            habilitado: user.habilitado,
             token
         })
         
@@ -102,7 +103,7 @@ const renewToken = async(req, res) => {
         msg: 'renew',
         uid,
         usuario,
-        token
+        token,
     })
 }
 
