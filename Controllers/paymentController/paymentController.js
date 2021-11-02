@@ -2,8 +2,8 @@ const User = require('../../models/User');
 const mercadopago = require('mercadopago');
 const axios = require('axios');
 
-const { generateQr } = require('../paymentController/qrcodeController');
 const { addAssistant } = require('../EventsControllers/AssisController');
+const { generateQr } = require('../paymentController/qrcodeController');
 
 // const URL = "http://localhost:3000/detail/"
 const URL = "https://flamboyant-golick-d7cb40.netlify.app"
@@ -28,8 +28,7 @@ const getMercadoPagoLink = async (req, res) => {
     const { title, price, quantity, eventID } = req.body;
 
     try {
-        console.log("entro aca el hijo de puta")
-
+        
         // agregar credenciales
         mercadopago.configure({
             access_token: "TEST-5298667857996708-102621-3fa54a132706b9044d96e0ef6dfc2a9e-1007503894"
@@ -59,8 +58,6 @@ const getMercadoPagoLink = async (req, res) => {
                     err
                 })
             }
-
-            console.log("RESPONSE", response.body);
 
             res.json({
                 LinkMP: response.body.init_point,
