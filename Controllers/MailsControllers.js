@@ -41,6 +41,38 @@ const enviarMailAsistir = async (req, res) =>{
 
 };
 
+const enviarMailCuandoBorranEvento = async (req, res) =>{
+
+  const {email, nombreDelEvento} = req.params;
+
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: "clanfest04@gmail.com",
+        pass: "Clanfest2021"
+    }
+
+});
+
+var mailOptions = {
+  from: "Remitente",
+  to: `${email}`,
+  subject: "Tiene un nuevo asistente en su evento",
+  text: `Se le informa desde la App ClanFest que el evento ${nombreDelEvento} fue eliminado. Sigue navegando en Clan fest para encontrar otros eventos!!`
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+
+}
 
 
-module.exports = {enviarMailAsistir};
+
+module.exports = {enviarMailAsistir, enviarMailCuandoBorranEvento};

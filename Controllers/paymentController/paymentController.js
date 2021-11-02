@@ -5,6 +5,9 @@ const axios = require('axios');
 const { addAssistant } = require('../EventsControllers/AssisController');
 const { generateQr } = require('../paymentController/qrcodeController');
 
+// const URL = "http://localhost:3000/detail/"
+const URL = "https://flamboyant-golick-d7cb40.netlify.app"
+
 const getPayments = async (req,res) => {
 
     try {
@@ -44,9 +47,9 @@ const getMercadoPagoLink = async (req, res) => {
                 }
             ],
             "back_urls": {
-                success: `http://localhost:3000/detail/${eventID}`,
-                pending: `http://localhost:3000/detail/${eventID}`,
-                failure: `http://localhost:3000/detail/${eventID}`
+                success: `${URL}/detail/${eventID}`,
+                pending: `${URL}/detail/${eventID}`,
+                failure: `${URL}/detail/${eventID}`
             }
         };
 
