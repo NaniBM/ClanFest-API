@@ -9,18 +9,33 @@ const { generateQr, createFile } = require('../paymentController/qrcodeControlle
 // const URL = "http://localhost:3000/detail/"
 const URL = "https://flamboyant-golick-d7cb40.netlify.app"
 
+const emailAdm = async(id)=>{
+    try{
+        const emailA = await User.findById(id).select('email');
+        return emailA.email;
+    }catch{
+        console.error(err)
+    }
+}
+
 const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find().select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
+        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["approved", "aprobado", "Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
             nombreDelEvento: 1,
+            autor: 1
         }).exec();
 
         let filtrado = result.map((u) => {
-            u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "Aprobado")
+            u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "approved" ||p.statusPago.status === "aprobado"||p.statusPago.status === "Aprobado")
+            for(ev of u.eventosaAsistir){
+                // let eid = e.eventId && e.eventId.autor
+            Object.defineProperty(ev.eventId, 'emailAdmin',{value:emailAdm(ev.eventId.autor), writable:true })
+            }
             return u
         })
+
         return res.json(filtrado);
 
     } catch (err) {
