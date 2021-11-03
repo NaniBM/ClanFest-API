@@ -28,4 +28,7 @@ router.get('/qr/:id/:eventid', getQr);
 // envia img con QR
 router.get('/sendqr/:imgname', sendQr);
 
+// agregar asistente a evento gratuito
+
+
 module.exports = router;
