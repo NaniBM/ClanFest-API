@@ -1,5 +1,6 @@
 const Event = require('../../models/Event');
 const User = require('../../models/User');
+const { ObjectId } = require('mongodb');
 
 const addEvents = async function(req, res){
     try{
@@ -79,7 +80,9 @@ const getEventDetail = async function(req, res){
 
 const deleteEvent = async (req, res) => {
     try {
-        const result = await Event.findByIdAndDelete(req.params.id);
+        const {asistentes} = req.body;
+        const eventId = req.params.id;
+        const result = await Event.findByIdAndDelete(eventId);
 
         if (result === null) {
             return res.json({
@@ -87,9 +90,25 @@ const deleteEvent = async (req, res) => {
             });
 
         } else {
-            return res.json({
-                message: `Se ha eliminado el evento ${result.nombreDelEvento}`
-            });
+            if(asistentes){
+                for(const asist of asistentes){
+                    await User.findByIdAndUpdate(asist,
+                    {$pull: {
+                        eventosaAsistir: {
+                            eventId: ObjectId(eventId)
+                        }
+                    }}).exec();
+                }
+
+                return res.json({
+                    message: `Se ha eliminado el evento ${result.nombreDelEvento} y a todos sus asistentes`
+                });
+
+            }else{
+                return res.json({
+                    message: `Se ha eliminado el evento ${result.nombreDelEvento}`
+                });
+            }
         };
     } catch (err) {
         console.log(err);

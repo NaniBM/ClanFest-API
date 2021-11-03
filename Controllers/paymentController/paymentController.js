@@ -8,20 +8,39 @@ const { generateQr } = require('../paymentController/qrcodeController');
 // const URL = "http://localhost:3000/detail/"
 const URL = "https://flamboyant-golick-d7cb40.netlify.app"
 
+const emailAdm = async(id)=>{
+    try{
+        const emailA = await User.findById(id).select('email');
+        return emailA.email;
+    }catch{
+        console.error(err)
+    }
+}
+
 const getPayments = async (req,res) => {
 
     try {
 
-        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
-            nombreDelEvento: 1
+        const result = await User.find({'eventosaAsistir.statusPago.status': {$in:["approved", "aprobado", "Aprobado"]}}).select('eventosaAsistir usuario email').populate('eventosaAsistir.eventId', {
+            nombreDelEvento: 1,
+            autor: 1
         }).exec();
 
         let filtrado = result.map((u) => {
-            u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "Aprobado")
+            u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "approved" ||p.statusPago.status === "aprobado"||p.statusPago.status === "Aprobado")
+            u.eventosaAsistir.map(e => {
+                let eid = e.eventId && e.eventId.autor
+                // console.log('EID', eid)
+                if(eid){ Object.defineProperty(e.eventId, 'emailAdmin',{value:"pepe@pepe", writable:true }) 
+                // console.log('AAAAA', e.eventId)
+            }
+                return e
+            })
             return u
         })
+
         return res.json(filtrado);
-        
+
     } catch (err) {
         console.error(err)
     }
