@@ -29,10 +29,19 @@ const getPayments = async (req,res) => {
 
         let filtrado = result.map((u) => {
             u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "approved" ||p.statusPago.status === "aprobado"||p.statusPago.status === "Aprobado")
-            for(ev of u.eventosaAsistir){
-                // let eid = e.eventId && e.eventId.autor
-            Object.defineProperty(ev.eventId, 'emailAdmin',{value:emailAdm(ev.eventId.autor), writable:true })
-            }
+            // for(const ev of u.eventosaAsistir){
+            //     // let eid = e.eventId && e.eventId.autor
+            // Object.defineProperty(ev.eventId, 'emailAdmin',{value:"pepe@pepe", writable:true })
+            
+            // // e.eventId.emailAdmin = "pepe@pepe.com"
+            // ev.eventId= {
+            //     _id: ev.eventId._id,
+            //     nombreDelEvento: ev.eventId.nombreDelEvento,
+            //     autor: ev.eventId.autor,
+
+            // }
+            // console.log('EVV', ev.eventId)
+            // }
             return u
         })
 
