@@ -28,14 +28,10 @@ const getPayments = async (req,res) => {
 
         let filtrado = result.map((u) => {
             u.eventosaAsistir = u.eventosaAsistir.filter(p => p.statusPago.status === "approved" ||p.statusPago.status === "aprobado"||p.statusPago.status === "Aprobado")
-            u.eventosaAsistir.map(e => {
-                let eid = e.eventId && e.eventId.autor
-                // console.log('EID', eid)
-                if(eid){ Object.defineProperty(e.eventId, 'emailAdmin',{value:"pepe@pepe", writable:true }) 
-                // console.log('AAAAA', e.eventId)
+            for(ev of u.eventosaAsistir){
+                // let eid = e.eventId && e.eventId.autor
+            Object.defineProperty(ev.eventId, 'emailAdmin',{value:emailAdm(ev.eventId.autor), writable:true })
             }
-                return e
-            })
             return u
         })
 
