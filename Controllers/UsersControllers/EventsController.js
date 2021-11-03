@@ -102,18 +102,19 @@ const addToAFreeEvent = async (req, res) => {
             }
             ).exec();
 
-            //genero file
-            await createFile(user.usuario, id, eventid)
-
-            // genero QR
-            await generateQr(user.usuario, user._id, eventid);
-            
             // agrego al usuario asistente al model Event
             await addAssistant(id, eventId);
+
+            //genero file
+            await createFile(user.usuario, id, eventId);
+
+            // genero QR
+            await generateQr(user.usuario, user._id, eventId);
 
             return res.json({
                 message: `${user.usuario} asistira a un evento gratuito`
             });
+
         } else {
             return res.json({
                 message: 'El user ya asiste a este evento'
