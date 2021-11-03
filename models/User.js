@@ -32,7 +32,8 @@ const userSchema = new Schema({
     },
   },
   admin: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   password: {
     type: String,
