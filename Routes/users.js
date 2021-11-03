@@ -32,7 +32,7 @@ router.get('/usereventstoassist/:id', getEventsToAssist);
 router.patch('/addeventstoassist/:id/:eventId', addEventToAssist);
 
 // agregar a un evento gratuito (genera el QR)
-router.get('/addtofreeevent/:id/:eventId', addToAFreeEvent);
+router.patch('/addtofreeevent/:id/:eventId', addToAFreeEvent);
 
 // eliminar evento a asistir
 router.patch('/deleteeventstoassist/:id/:eventId', deleteEventToAssist);
