@@ -92,7 +92,7 @@ const deleteEvent = async (req, res) => {
         } else {
             if(asistentes){
                 for(const asist of asistentes){
-                    await User.findByIdAndUpdate(asist,
+                    await User.findByIdAndUpdate(asist.usuario[0],
                     {$pull: {
                         eventosaAsistir: {
                             eventId: ObjectId(eventId)

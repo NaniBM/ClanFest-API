@@ -20,7 +20,7 @@ router.get('/assistans/:id', getAssistans);
 router.put('/edit/:id', putEditEvent);
 
 //ruta para borrar un evento
-router.delete('/delete/:id', deleteEvent);
+router.post('/delete/:id', deleteEvent);
 
 
 module.exports = router;
