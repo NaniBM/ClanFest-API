@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
   });
 });
 
-//----------------------------------------------
+
 //habilitar body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -100,7 +100,10 @@ app.get('/cors', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   res.send({ "msg": "This has CORS enabled 🎈" })
   })
+
+
 app.use(cors({ origin: "*" }));
+
 
 app.use(router);
 
