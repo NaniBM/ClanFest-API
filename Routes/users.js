@@ -5,7 +5,7 @@ const router = express.Router();
 const { getUsers, getUserById, deleteUser, editUser } = require('../Controllers/UsersControllers/UserController');
 const { getFavouritesEvents, removeFavourite, addFavourite } = require('../Controllers/UsersControllers/FavoritesController');
 const { addTask, getTasks, deleteTask } = require('../Controllers/UsersControllers/TaskController');
-const { getEvents, getEventsToAssist, addEventToAssist, deleteEventToAssist} = require('../Controllers/UsersControllers/EventsController');
+const { getEvents, getEventsToAssist, addEventToAssist, deleteEventToAssist, addToAFreeEvent} = require('../Controllers/UsersControllers/EventsController');
 
 // trae todos los users
 router.get('/', getUsers);
@@ -31,6 +31,9 @@ router.get('/usereventstoassist/:id', getEventsToAssist);
 // agregar evento a asistir
 router.patch('/addeventstoassist/:id/:eventId', addEventToAssist);
 
+// agregar a un evento gratuito (genera el QR)
+router.get('/addtofreeevent/:id/:eventId', addToAFreeEvent);
+
 // eliminar evento a asistir
 router.patch('/deleteeventstoassist/:id/:eventId', deleteEventToAssist);
 
@@ -48,6 +51,5 @@ router.patch('/addfavourite/:id/:eventId', addFavourite);
 
 // borrar evento de favorito
 router.patch('/removefavourite/:id/:eventId', removeFavourite);
-
 
 module.exports = router;
