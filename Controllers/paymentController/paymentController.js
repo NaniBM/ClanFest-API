@@ -3,7 +3,8 @@ const mercadopago = require('mercadopago');
 const axios = require('axios');
 
 const { addAssistant } = require('../EventsControllers/AssisController');
-const { generateQr } = require('../paymentController/qrcodeController');
+const { generateQr, createFile } = require('../paymentController/qrcodeController');
+
 
 // const URL = "http://localhost:3000/detail/"
 const URL = "https://flamboyant-golick-d7cb40.netlify.app"
@@ -146,6 +147,9 @@ const addPayment = async (req, res) => {
                     new: true // retorno el model ACTUALIZADO
                 }
             ).exec();
+
+            //genero file
+            await createFile(user.usuario, id, eventid)
 
             // genero QR
             await generateQr(user.usuario, user._id, eventid);

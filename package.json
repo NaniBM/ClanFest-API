@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
+    "base64-stream": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -31,6 +32,8 @@
     "pdf-lib": "^1.17.0",
     "pdf-qr": "^1.0.0",
     "pdfkit": "^0.13.0",
+    "pdfmake": "^0.2.2",
+    "qr-image": "^3.2.0",
     "qrcode": "^1.4.4",
     "shortid": "^2.2.16",
     "socket.io": "^4.3.1"

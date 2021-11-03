@@ -79,6 +79,7 @@ const getEventDetail = async function(req, res){
 
 const deleteEvent = async (req, res) => {
     try {
+
         const result = await Event.findByIdAndDelete(req.params.id);
 
         if (result === null) {
