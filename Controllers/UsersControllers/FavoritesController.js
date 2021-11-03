@@ -11,7 +11,8 @@ const getFavouritesEvents = async (req, res) => {
             nombreDelEvento: 1,
             _id: 1,
             imagen: 1,
-            fecha: 1
+            fecha: 1,
+            precio: 1
         }).exec();
 
         const favouritesEvents = result.eventsFavoritos;
