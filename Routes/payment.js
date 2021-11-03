@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {getMercadoPagoLink, addPayment, getPayment, updatePayment, getPaymentStatus, getPayments} = require('../Controllers/paymentController/paymentController');
-const { getQr, genQR } = require('../Controllers/paymentController/qrcodeController');
+const { getQr, sendQr } = require('../Controllers/paymentController/qrcodeController');
 
 // traer todos los pagos
 router.get('/getpayments', getPayments);
@@ -23,8 +23,9 @@ router.patch('/addpayment/:id/:eventid', addPayment);
 router.patch('/updatepayment/:id', updatePayment);
 
 // traer qr de un evento
-router.get('/qr/:id/:eventid', getQr)
+router.get('/qr/:id/:eventid', getQr);
 
-router.get('/genQR', genQR)
+// envia img con QR
+router.get('/sendqr/:imgname', sendQr);
 
 module.exports = router;

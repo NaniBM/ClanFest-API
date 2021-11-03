@@ -31,6 +31,9 @@ const userSchema = new Schema({
       message: "Solo se permite direcciones de correos",
     },
   },
+  admin: {
+    type: Boolean
+  },
   password: {
     type: String,
     required: true,
