@@ -2,6 +2,7 @@ const User = require('../../models/User');
 const { ObjectId } = require('mongodb');
 
 const { addAssistant, deleteAssistant } = require('../EventsControllers/AssisController');
+const { deleteEvent } = require('../EventsControllers/EventController');
 
 
 const getEvents = async (req, res) => {
