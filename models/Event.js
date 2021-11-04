@@ -59,7 +59,8 @@ const eventSchema = new Schema({
     ref: 'User'// guardar username del creador 
   },
   publico: {
-    type: Boolean
+    type: Boolean,
+    default: true
   },
   invitados: {
     type: Number
