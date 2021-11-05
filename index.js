@@ -21,28 +21,17 @@ mongoose
   .then((db) => console.log("BD conectada"))
   .catch((error) => console.error(error));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, DELETE, PATCH"
-  );
-  next();
-});
-
 const io = socketIo(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
   },
 });
+
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+})
 
 //events
 io.on("connection", (socket) => {
